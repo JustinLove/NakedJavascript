@@ -1,0 +1,64 @@
+<html>
+
+<head>
+
+<!-- The style sheet should be kept in a separate file; it contains the design for the widget -->
+<style type="text/css">
+	@import "DisClock.css";
+</style>
+
+<script type="text/javascript" src="file:///System/Library/WidgetResources/AppleClasses/AppleAnimator.js" charset="utf-8"></script>
+<script type="text/javascript" src="file:///System/Library/WidgetResources/AppleClasses/AppleButton.js" charset="utf-8"></script>
+<script type="text/javascript" src="file:///System/Library/WidgetResources/AppleClasses/AppleInfoButton.js" charset="utf-8"></script>
+
+<!-- The JavaScript file contains the logic needed for this widget -->
+<script type='text/javascript' src='DisClock.js' charset='utf-8'></script>
+
+</head>
+
+<body onload='CGD.DisClock.setup();'>
+
+  <div id="front">
+    <canvas id='canvas' width='172' height='172'></canvas>
+    <canvas id='overlay' width='172' height='172'></canvas>
+    <div id="infoButton"></div>
+    <div id="info"></div>
+  </div>
+  <div id="back">
+    <img src="Back.png" width ='172' height='172' class="backdrop"/>
+    <form class="back-contents">
+
+      <p id='normal-label' class='label'>Normal:</p>
+      <select id='normal-popup' class='popup' onchange='CGD.DisClock.changed.normal(this);'>
+        <option value='placeholder'>Placeholder</option>
+      </select>
+
+      <div class="radio container">
+        <div class="radio item">
+          <input type="radio" class="radio box" id="mode-add" name="hover-mode" value="add" onclick="CGD.DisClock.changed.hovermode(this);">
+          <p class="radio label">+</p>
+        </div>
+        <div class="radio item">
+          <input type="radio" class="radio box" id="mode-replace" name="hover-mode" value="replace" onclick="CGD.DisClock.changed.hovermode(this);">
+          <p class="radio label">&lt;-&gt;</p>
+        </div>
+        <div class="radio item">
+          <input type="radio" class="radio box" id="mode-subtract" name="hover-mode" value="subtract" onclick="CGD.DisClock.changed.hovermode(this);">
+          <p class="radio label">-</p>
+        </div>
+      </div>
+
+      <p id='hover-label' class='label'>Hover:</p>
+      <select id='hover-popup' class='popup' onchange='CGD.DisClock.changed.hover(this);'>
+        <option value='placeholder'>Placeholder</option>
+      </select>
+
+      <div id="done" class="button"></div>
+    </form>
+  </div>
+
+  <div id='debugDiv'></div>
+
+</body>
+
+</html>
