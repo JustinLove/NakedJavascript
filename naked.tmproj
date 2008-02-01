@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>files/programming/javascript/naked/naked.js</string>
+	<string>naked.js</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -37,7 +37,7 @@
 	<integer>200</integer>
 	<key>metaData</key>
 	<dict>
-		<key>files/programming/javascript/naked/jquery-1.2.2.js</key>
+		<key>jquery-1.2.2.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -51,7 +51,7 @@
 			<key>firstVisibleLine</key>
 			<integer>250</integer>
 		</dict>
-		<key>files/programming/javascript/naked/naked.css</key>
+		<key>naked.css</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -65,7 +65,7 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>files/programming/javascript/naked/naked.html</key>
+		<key>naked.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -79,27 +79,27 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>files/programming/javascript/naked/naked.js</key>
+		<key>naked.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>87</integer>
+				<integer>43</integer>
 				<key>line</key>
-				<integer>520</integer>
+				<integer>289</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>498</integer>
+			<integer>260</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>files/programming/javascript/naked/naked.html</string>
-		<string>files/programming/javascript/naked/naked.css</string>
-		<string>files/programming/javascript/naked/naked.js</string>
-		<string>files/programming/javascript/naked/jquery-1.2.2.js</string>
+		<string>naked.html</string>
+		<string>naked.css</string>
+		<string>naked.js</string>
+		<string>jquery-1.2.2.js</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

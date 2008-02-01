@@ -287,7 +287,7 @@ function browseCompound(x) {
   
   function item(i) {
     jq = inspector(i, x[i]);
-    // god(window) crashes if when trying to HOP native properties, at least in firefox
+    // god(window) crashes when trying to hOP native properties, at least in firefox
     jq.addClass(x == god || x.hasOwnProperty(i) ? 'own' : 'prototype');
     jq.appendTo(browser);
   }
