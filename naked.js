@@ -77,7 +77,7 @@ CGD.DEBUG = function() {
 } ();
 
 CGD.JS = CGD.JS || {};
-CGD.stopWhining = function() {
+(function() {
   function publish(s) {
     CGD.JS[s] = eval(s);
   }
@@ -202,54 +202,7 @@ CGD.stopWhining = function() {
     Math.RADIANS = Math.PI * 2;
   }
   publish('corrupt');
-}();
-
-
-CGD.new_ticker = CGD.new_ticker || function (call, timeout) {
-  // originally used a true interal (set/clearInterval), but they drift
-  var my = {
-    interval: null,
-    configure: function(period) {
-      if (isNaN(period) || period < 10) {
-        throw new RangeError('Timer');
-      }
-      timeout = period;
-      if (my.interval != null) {
-        my.stop();
-        my.start();
-      }
-    },
-    restart: function(period) {
-      timeout = period;
-      my.stop();
-      my.start();
-    },
-    start: function() {
-      if (my.interval == null) {
-        my.interval = setTimeout(ontimeout, timeout - (new Date().getTime() % timeout));
-      }
-      //call();
-    },
-    stop: function () {
-      if (my.interval != null) {
-        clearTimeout(my.interval);
-        my.interval = null;
-      }
-    },
-    running: function () {
-      return (my.interval == null);
-    },
-    toString: function () {
-      return '[Ticker ' + call + ' /' + timeout + ']';
-    }
-  };
-  function ontimeout() {
-    my.stop();
-    call();
-    my.start();
-  }
-  return my;
-};
+}());
 
 CGD.HTML = CGD.HTML || {};
 CGD.HTML.from = function (structure, arrayElements) {
@@ -278,212 +231,10 @@ CGD.HTML.from = function (structure, arrayElements) {
   }
 };
 
-CGD.HTML.select = CGD.HTML.select || {};
-CGD.HTML.select.populate = function(selectId, arrayWithNames, initial)
-{
-  var select = document.getElementById (selectId);
-
-  // remove all children
-  while (select.hasChildNodes()) {
-    select.removeChild(select.firstChild);
-  }
-
-  arrayWithNames.each(function(a) {
-    var element = document.createElement('option');
-    element.innerText = a.name;
-    select.appendChild(element);
-  });
-  
-  select.selectedIndex = initial || 0;
-
-  return select;
-};
-
-CGD.HTML.radio = CGD.HTML.radio || {};
-CGD.HTML.radio.set = function(idPrefix, value) {
-  var radio = document.getElementById(idPrefix + value);
-  radio.checked = true;
-};
-
-CGD.draw = CGD.draw || {};
-CGD.draw.on = function(id, f) {
-  var canvas = document.getElementById(id);
-  if (!id) {
-    return;
-  }
-  var context = canvas.getContext("2d");
-  if (!context) {
-    return;
-  }
-
-  context.save();
-  context.scale(canvas.width, canvas.height);
-  context.clearRect(0, 0, 1, 1);
-
-  f(context);
-
-  context.restore();
-};
-
-CGD.RGB = CGD.RGB || {};
-CGD.STRING = CGD.STRING || {};
-CGD.stopWhining = function() {
-  CGD.RGB.STRINGS = {
-    red: '#F00',
-    green: '#0F0',
-    blue: '#00F',
-    orange: '#FFA500',
-    yellow: '#FF0',
-    purple: '#808',
-    pink: '#FFC0CB',
-    cyan: '#0FF',
-    white: '#FFF',
-    black: '#000',
-    lastEntry: null
-  };
-  
-  function rgbFromHex6(s) {
-    function c(s, pos) {
-      return parseInt(s.substr(pos,2), 16) / 255;
-    }
-    return {r: c(s, 1), g: c(s, 3), b: c(s, 5)};
-  }
-
-  function rgbFromHex3(s) {
-    function c(s, pos) {
-      return parseInt(s.substr(pos,1), 16) / 15;
-    }
-    return {r: c(s, 1), g: c(s, 2), b: c(s, 3)};
-  }
-
-  function rgbFromString(s) {
-    if (!s) {
-      return rgbFromString('white');
-    } else if (CGD.RGB.STRINGS[s]) {
-      return rgbFromString(CGD.RGB.STRINGS[s]);
-    } else if (s.length == 4) {
-      return rgbFromHex3(s);
-    } else if (s.length == 7) {
-      return rgbFromHex6(s);
-    } else {
-      throw s + ' is not a color';
-    }
-  }
-  CGD.RGB.fromString = rgbFromString;
-
-  function stringFromRgb(rgb) {
-    function c(a) {
-      b = Math.round(a * 255).toString(16);
-      return (b.length == 1) ? ('0' + b) : b;
-    }
-    return '#' + c(rgb.r) + c(rgb.g) + c(rgb.b);
-  }
-  CGD.STRING.fromRgb = stringFromRgb;
-
-  function interpolate(a, b, at, to) {
-    return a + (b-a)*at/to;
-  }
-
-  function interpolateColors(a, b, at, to) {
-    return {
-      r: interpolate(a.r, b.r, at, to),
-      g: interpolate(a.g, b.g, at, to),
-      b: interpolate(a.b, b.b, at, to)
-    };
-  }
-
-  function interpolateStringColors(a, b, steps) {
-    var it = [a];
-    var as = rgbFromString(a);
-    var bs = rgbFromString(b);
-    for (var i = 1;i < steps-1;i++) {
-      it.push(stringFromRgb(interpolateColors(as, bs, i, steps-1)));
-    }
-    it.push(b);
-    return it;
-  }
-  CGD.RGB.interpolate = interpolateStringColors;
-}();
-
-CGD.ARC = CGD.ARC || {CLOCKWISE: 0, COUNTERCLOCKWISE: true};
-
-CGD.ASTRO = CGD.ASTRO || {};
-CGD.JS.mix(CGD.ASTRO, function() {
-  function d_latitude() {
-    return 42;
-  }
-
-  function d_longitude() {
-    return new Date().getTimezoneOffset() / 4;  
-  }
-
-  function now() {
-    var my = new Date();
-  //  var my = new Date(2008, 5, 20, 23, 59);
-    return my.getTime() - (my.getTimezoneOffset() * 60 * 1000);
-  }
-  
-  var RADIANS = 2 * Math.PI;
-  
-  function radiansFromDegrees(degrees) {
-    return degrees * RADIANS / 360;
-  }
-
-  function degreesFromRadians(radians) {
-    return radians * 360 / RADIANS;
-  }
-
-  function r_gamma() {
-    return ((now() / (1000 * 60 * 60 * 24 * 365.24219)) * RADIANS) % RADIANS;
-  }
-
-  function m_eqtime() {
-    var y = r_gamma();
-    return 229.18 * (
-      0.0000075
-      + 0.001868 * Math.cos(y)
-      - 0.032077 * Math.sin(y)
-      - 0.014615 * Math.cos(y * 2)
-      - 0.040849 * Math.sin(y * 2)
-    );
-  }
-
-  function r_declination() {
-    var y = r_gamma();
-    return 0.006918
-      - 0.399912 * Math.cos(y)
-      + 0.070257 * Math.sin(y)
-      - 0.006758 * Math.cos(y * 2)
-      + 0.000907 * Math.sin(y * 2)
-      - 0.002697 * Math.cos(y * 3)
-      + 0.001480 * Math.sin(y * 3);
-  }
-
-  function m_hourAngle(d_zenith) {
-    var lat = radiansFromDegrees(d_latitude());
-    var decl = r_declination();
-    var c_zenith = Math.cos(radiansFromDegrees(d_zenith));
-    var divisor = Math.cos(lat)*Math.cos(decl);
-    var tanget = Math.tan(lat)*Math.tan(decl);
-    var first = c_zenith / divisor;
-    return 4 * degreesFromRadians(Math.acos(first - tanget));
-  }
-
-  function m_solarNoon() {
-    return (12 * 60) + 4*d_longitude() - new Date().getTimezoneOffset() - m_eqtime();
-  }
-  
-  return {m_hourAngle: m_hourAngle, m_solarNoon: m_solarNoon};
-}());
-
-CGD.naked = function() {
+// appliction function
+(function() {
 
 var god = CGD.god;
-
-var app = {};
-function publish(s) {
-  app[s] = eval(s);
-}
 
 var DEBUG = CGD.DEBUG;
 function D(str) {
@@ -501,7 +252,6 @@ $(document).ready(function() {
   DEBUG.on();
 //  D('test');
   test();
-  return 0;
 });
 
 function test() {
@@ -550,6 +300,5 @@ function inspector(name, x) {
   return jq;
 }
 
-return app;
 //end CGD.naked
-}();
+}());
