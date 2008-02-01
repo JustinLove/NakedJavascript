@@ -258,19 +258,37 @@ function test() {
   browse(CGD);
 }
 
+function browsable(x) {
+  switch (x) {
+    case null:
+    case undefined:
+      return false;
+    default:
+      return typeof(x) in {'function': true, 'object': true};
+  }
+}
+
 function browse(x) {
+  switch(typeof(x)) {
+    case 'function':
+      $(CGD.HTML.from({p: {code: x.toString()}})).appendTo('#naked');
+      break;
+    case 'object':
+      browseCompound(x);
+      break;
+    default:
+      $(CGD.HTML.from({p: x.toString()})).appendTo('#naked');
+  }
+}
+
+function browseCompound(x) {
   var browser = $(CGD.HTML.from({table: {tr: ['Name', 'Type', 'Value']}}, 'th'));
   var jq;
-  var n = 0;
-  var kind = 'own';
   
   function item(i) {
-    n = n + 1;
-//    D([i, n]);
     jq = inspector(i, x[i]);
     // god(window) crashes if when trying to HOP native properties, at least in firefox
-    kind = x == god || x.hasOwnProperty(i) ? 'own' : 'prototype';
-    jq.addClass(kind);
+    jq.addClass(x == god || x.hasOwnProperty(i) ? 'own' : 'prototype');
     jq.appendTo(browser);
   }
   for (var index in x) {
@@ -295,8 +313,10 @@ function inspector(name, x) {
   var values = [name].concat(repr(x));
   var html = CGD.HTML.from({tr: values}, 'td');
   var jq = $(html);
-  var last = jq.find('td:last');
-  last.click(function() {browse(x);}).addClass('link');
+  if (browsable(x)) {
+    var last = jq.find('td:last');
+    last.click(function() {browse(x);}).addClass('link');
+  }
   return jq;
 }
 
