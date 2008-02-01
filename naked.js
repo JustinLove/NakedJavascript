@@ -252,13 +252,22 @@ CGD.new_ticker = CGD.new_ticker || function (call, timeout) {
 };
 
 CGD.HTML = CGD.HTML || {};
-CGD.HTML.from = function (structure) {
+CGD.HTML.from = function (structure, arrayElements) {
+  arrayElements = arrayElements || "p";
   var text = "";
   switch(typeof(structure)) {
     case 'object':
-      for (var i in structure) {
-        if (structure.hasOwnProperty(i)) {
-          text += "<" + i + ">" + CGD.HTML.from(structure[i]) + "</" + i + ">";
+      if (structure.constructor && structure.constructor === Array) {
+        for (var i in structure) {
+          if (structure.hasOwnProperty(i)) {
+            text += "<" + arrayElements + ">" + CGD.HTML.from(structure[i], arrayElements) + "</" + arrayElements + ">";
+          }
+        }
+      } else {
+        for (var i in structure) {
+          if (structure.hasOwnProperty(i)) {
+            text += "<" + i + ">" + CGD.HTML.from(structure[i], arrayElements) + "</" + i + ">";
+          }
         }
       }
       return text;
@@ -490,7 +499,7 @@ var mixSafe = CGD.JS.mixSafe;
 $(document).ready(function() {
   DEBUG.onload();
   DEBUG.on();
-  D('test');
+//  D('test');
   test();
   return 0;
 });
@@ -500,22 +509,45 @@ function test() {
 }
 
 function browse(x) {
-  //$(CGD.HTML.from({div: repr(x)})).appendTo('#naked');
-  var browser = $("<div class='browser'></div>");
-  CGD.JS.each_with_index(x, function (i, y) {browser.append(inspector(i, x));});
+  var browser = $(CGD.HTML.from({table: {tr: ['Name', 'Type', 'Value']}}, 'th'));
+  var jq;
+  var n = 0;
+  var kind = 'own';
+  
+  function item(i) {
+    n = n + 1;
+//    D([i, n]);
+    jq = inspector(i, x[i]);
+    // god(window) crashes if when trying to HOP native properties, at least in firefox
+    kind = x == god || x.hasOwnProperty(i) ? 'own' : 'prototype';
+    jq.addClass(kind);
+    jq.appendTo(browser);
+  }
+  for (var index in x) {
+    item(index);
+  }
   browser.appendTo('#naked');
 }
 
 function repr(x) {
-  if (typeof(x) == 'function') {
-    return ['*', 'function'];
-  } else {
-    return [x, typeof(x)];
+  var t = typeof(x);
+  switch(t) {
+    case 'function':
+      return [t, '*'];
+    case 'undefined':
+      return [t, 'undefined'];
+    default:
+      return [t, x + ""];
   }
 }
 
 function inspector(name, x) {
-  return $("<div class='inspector'></div>").html(name + ": " + repr(x).toString());
+  var values = [name].concat(repr(x));
+  var html = CGD.HTML.from({tr: values}, 'td');
+  var jq = $(html);
+  var last = jq.find('td:last');
+  last.click(function() {browse(x);}).addClass('link');
+  return jq;
 }
 
 return app;
