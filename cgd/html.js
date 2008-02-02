@@ -27,3 +27,29 @@ CGD.HTML.from = function (structure, arrayElements) {
   }
 };
 
+CGD.HTML.select = CGD.HTML.select || {};
+CGD.HTML.select.populate = function(selectId, arrayWithNames, initial)
+{
+  var select = document.getElementById (selectId);
+
+  // remove all children
+  while (select.hasChildNodes()) {
+    select.removeChild(select.firstChild);
+  }
+
+  arrayWithNames.each(function(a) {
+    var element = document.createElement('option');
+    element.innerText = a.name;
+    select.appendChild(element);
+  });
+  
+  select.selectedIndex = initial || 0;
+
+  return select;
+};
+
+CGD.HTML.radio = CGD.HTML.radio || {};
+CGD.HTML.radio.set = function(idPrefix, value) {
+  var radio = document.getElementById(idPrefix + value);
+  radio.checked = true;
+};
