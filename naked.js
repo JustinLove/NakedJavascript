@@ -35,7 +35,8 @@ function extendJQ() {
         options = options || {};
         options.width = options.width || this.width() + 50;
         options.height = options.height || this.height() + 80;
-        this.attr({'class': "flora"}).dialog(options);
+        this.attr({'class': "flora"}).dialog(options).
+          parents('.ui-dialog').hide().show('slow');
       }
     });
 }
