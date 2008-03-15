@@ -9,6 +9,7 @@ var god = CGD.god;
 // load the most usefull library routines into our namespace
 eval(CGD.JS.explode('CGD'));
 eval(CGD.JS.explode('CGD.JS'));
+eval(CGD.JS.explode('CGD.OBJECT'));
 eval(CGD.JS.explode('CGD.ARRAY'));
 
 function D(str) {
@@ -16,9 +17,11 @@ function D(str) {
 };
 
 $(document).ready(function() {
+  extendJQ();
+  $('#debugDiv').toDialog({position: 'bottom', title: 'Debug'});
   DEBUG.onload();
   DEBUG.on();
-//  D('test');
+  D('test');
   test();
 });
 
@@ -26,32 +29,31 @@ function test() {
   browse(CGD, 'CGD');
 }
 
-function browsable(x) {
-  switch (x) {
-    case null:
-    case undefined:
-      return false;
-    default:
-      return typeof(x) in {'function': true, 'object': true};
-  }
+function extendJQ() {
+  $.fn.extend({
+      toDialog: function(options) {
+        options = options || {};
+        options.width = options.width || this.width() + 50;
+        options.height = options.height || this.height() + 80;
+        this.attr({'class': "flora"}).dialog(options);
+      }
+    });
 }
 
 function browse(x, name) {
-  var it = browseContents(x).
+  browseContents(x).
     appendTo('#naked').
-    wrap('<div class="browser"></div>');
-  var dim = {
-    width: it.width() + 40,
-    height: it.height() + 60
-  };
-  it.
-    attr({'class': "flora", title: name}).dialog(dim);
+    wrap('<div class="browser"></div>').
+    toDialog({title: name});
 }
 
 function browseContents(x) {
   switch(typeof(x)) {
     case 'function':
-      return $(HTML.from({p: {code: x.toString()}}));
+      var props = browseCompound(x);
+      var it = $(HTML.from({div: {p: {code: x.toString()}}}));
+      it.append(props);
+      return it;
     case 'object':
       return browseCompound(x);
     default:
@@ -61,12 +63,15 @@ function browseContents(x) {
 
 function browseCompound(x) {
   var browser = $(HTML.from({table: {tr: {th: ['Name', 'Type', 'Value']}}}));
-  var jq;
   
   function item(i) {
-    jq = inspector(x[i], i);
-    jq.addClass(x.hasOwnProperty(i) ? 'own' : 'prototype');
-    jq.appendTo(browser);
+    try {
+      propertyInspector(x, i).appendTo(browser);
+    } catch (e) {
+      D(e);
+      //DEBUG.dump(e);
+      //D([x, i]);
+    }
   }
   for (var index in x) {
     item(index);
@@ -86,6 +91,16 @@ function repr(x) {
   }
 }
 
+function propertyInspector(container, name) {
+  try {
+    return inspector(container[name], name).
+      addClass(container.hasOwnProperty(name) ? 'own' : 'prototype');
+  } catch (e) {
+    //DEBUG.dump(e);
+    return $(HTML.from({tr: {td: [name, 'error', e.name]}})).addClass('error');
+  }
+}
+
 function inspector(x, name) {
   var values = [name].concat(repr(x));
   var html = HTML.from({tr: {td: values}});
@@ -95,6 +110,16 @@ function inspector(x, name) {
     last.click(function() {browse(x, name);}).addClass('link');
   }
   return jq;
+}
+
+function browsable(x) {
+  switch (x) {
+    case null:
+    case undefined:
+      return false;
+    default:
+      return typeof(x) in {'function': true, 'object': true};
+  }
 }
 
 //end CGD.naked

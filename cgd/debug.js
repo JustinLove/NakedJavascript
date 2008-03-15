@@ -204,10 +204,14 @@ CGD.DEBUG.FILTER.timestamp = function() {
   function dump(x) {
     this.p(x);
     for (var i in x) {
-      if (typeof(x[i]) == 'function') {
-        this.p([i, '*', 'function', x.hasOwnProperty(i)]);
-      } else {
-        this.p([i, x[i], typeof(x[i]), x.hasOwnProperty(i)]);
+      try {
+        if (typeof(x[i]) == 'function') {
+          this.p([i, '*', 'function', x.hasOwnProperty(i)]);
+        } else {
+          this.p([i, x[i], typeof(x[i]), x.hasOwnProperty(i)]);
+        }
+      } catch (e) {
+        this.p(e);
       }
     }
   }

@@ -20,7 +20,7 @@ code {
   width: 300px;
 }
 
-.browser {
+#naked {
   border: solid black 0.2em;
   display: block;
   min-width: 300px;
@@ -35,19 +35,20 @@ code {
   color: gray;
 }
 
-.possibleNative {
+.possibleNative,
+.error {
   color: red;
 }
 
 #debugDiv {
-  border-style: dotted;
-  border-color: black;
-  background: gray;
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
+  xborder-style: dotted;
+  xborder-color: black;
+  xbackground: gray;
+  xposition: absolute;
+  xbottom: 0px;
+  xleft: 0px;
   height: 200px;
   width: 90%;
   overflow: scroll;
   display:none;
-}
+} 
