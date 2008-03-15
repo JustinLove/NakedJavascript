@@ -1,31 +1,78 @@
+// Creative Commons Attribution-Share Alike 3.0 Unported Licence
+// http://creativecommons.org/licenses/by-sa/3.0/
+
 var CGD = window.CGD || {};
 
 CGD.HTML = CGD.HTML || {};
-CGD.HTML.from = function (structure, arrayElements) {
-  arrayElements = arrayElements || "p";
-  var text = "";
-  switch(typeof(structure)) {
-    case 'object':
-      if (structure.constructor && structure.constructor === Array) {
-        for (var i in structure) {
-          if (structure.hasOwnProperty(i)) {
-            text += "<" + arrayElements + ">" + CGD.HTML.from(structure[i], arrayElements) + "</" + arrayElements + ">";
-          }
-        }
-      } else {
-        for (var i in structure) {
-          if (structure.hasOwnProperty(i)) {
-            text += "<" + i + ">" + CGD.HTML.from(structure[i], arrayElements) + "</" + i + ">";
-          }
+
+// JSON to HTML.  Could be used like this:
+/* 
+{body: {
+  head: {title: "Title"},
+  body: {
+    h1: "Title",
+    div: {
+      p: [
+        "paragraph one",
+        {b: "bold paragraph two"},
+        "paragraph three"
+      ]
+    }
+  }
+}}
+Of course normally, it's only used to build fragments.
+*/
+(function() {
+  // From itself mostly handles the array special case.
+  //   The label of an array is the tag name for each of it's elements.
+  //   Normally every label generates exactly one tag.
+  function from(structure, tag) {
+    var text = "";
+    if (CGD.ARRAY.describes(structure)) {
+      for (var i in structure) {
+        if (structure.hasOwnProperty(i)) {
+          text += from(structure[i], tag);
         }
       }
       return text;
-    case 'number':
-      return structure.toFixed(2);
-    default:
-      return structure.toString();
-  }
-};
+    } else {
+      return enclose(tag, nonArray(structure));
+    }
+  };
+  CGD.HTML.from = from;
+  
+  // The regular value decode.
+  function nonArray(structure) {
+    if (structure == null) {
+      return "";
+    }
+
+    var text = "";
+    switch(typeof(structure)) {
+      case 'object':
+        for (var tag in structure) {
+          if (structure.hasOwnProperty(tag)) {
+            text += from(structure[tag], tag);
+          }
+        }
+        return text;
+      case 'number':
+        return structure.toFixed(2);
+      default:
+        return structure.toString();
+    }
+  };
+  
+  function enclose(tag, text) {
+    if (tag) {
+      return "<" + tag + ">" + text + "</" + tag + ">";
+    } else {
+      return text;
+    }
+  };
+}());
+
+// Rest are utility procedures for various tags.
 
 CGD.HTML.select = CGD.HTML.select || {};
 CGD.HTML.select.populate = function(selectId, arrayWithNames, initial)
@@ -37,19 +84,28 @@ CGD.HTML.select.populate = function(selectId, arrayWithNames, initial)
     select.removeChild(select.firstChild);
   }
 
-  arrayWithNames.each(function(a) {
+  select.selectedIndex = 0;
+
+  CGD.ARRAY.forEach(arrayWithNames, function(a, i) {
     var element = document.createElement('option');
-    element.innerText = a.name;
+    element.text = a.name;
     select.appendChild(element);
+    if (a.name === initial) {
+      select.selectedIndex = i;
+    }
   });
-  
-  select.selectedIndex = initial || 0;
 
   return select;
 };
 
+CGD.HTML.check = CGD.HTML.check || {};
+CGD.HTML.check.set = function(id, value) {
+  var box = document.getElementById(id);
+  box.checked = value;
+};
+
 CGD.HTML.radio = CGD.HTML.radio || {};
-CGD.HTML.radio.set = function(idPrefix, value) {
-  var radio = document.getElementById(idPrefix + value);
-  radio.checked = true;
+CGD.HTML.radio.set = function(id) {
+  var box = document.getElementById(id);
+  box.checked = true;
 };

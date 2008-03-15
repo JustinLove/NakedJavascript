@@ -6,16 +6,14 @@ CGD.god = window;
 
 var god = CGD.god;
 
-var DEBUG = CGD.DEBUG;
+// load the most usefull library routines into our namespace
+eval(CGD.JS.explode('CGD'));
+eval(CGD.JS.explode('CGD.JS'));
+eval(CGD.JS.explode('CGD.ARRAY'));
+
 function D(str) {
   DEBUG.p(str);
 };
-
-DEBUG.off();
-
-CGD.JS.corrupt();
-var mix = CGD.JS.mix;
-var mixSafe = CGD.JS.mixSafe;
 
 $(document).ready(function() {
   DEBUG.onload();
@@ -41,18 +39,18 @@ function browsable(x) {
 function browse(x) {
   switch(typeof(x)) {
     case 'function':
-      $(CGD.HTML.from({p: {code: x.toString()}})).appendTo('#naked');
+      $(HTML.from({p: {code: x.toString()}})).appendTo('#naked');
       break;
     case 'object':
       browseCompound(x);
       break;
     default:
-      $(CGD.HTML.from({p: x.toString()})).appendTo('#naked');
+      $(HTML.from({p: x.toString()})).appendTo('#naked');
   }
 }
 
 function browseCompound(x) {
-  var browser = $(CGD.HTML.from({table: {tr: ['Name', 'Type', 'Value']}}, 'th'));
+  var browser = $(HTML.from({table: {tr: {th: ['Name', 'Type', 'Value']}}}));
   var jq;
   
   function item(i) {
@@ -81,7 +79,7 @@ function repr(x) {
 
 function inspector(name, x) {
   var values = [name].concat(repr(x));
-  var html = CGD.HTML.from({tr: values}, 'td');
+  var html = HTML.from({tr: {td: values}});
   var jq = $(html);
   if (browsable(x)) {
     var last = jq.find('td:last');
