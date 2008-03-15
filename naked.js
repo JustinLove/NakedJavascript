@@ -23,7 +23,7 @@ $(document).ready(function() {
 });
 
 function test() {
-  browse(CGD);
+  browse(CGD, 'CGD');
 }
 
 function browsable(x) {
@@ -36,16 +36,26 @@ function browsable(x) {
   }
 }
 
-function browse(x) {
+function browse(x, name) {
+  var it = browseContents(x).
+    appendTo('#naked').
+    wrap('<div class="browser"></div>');
+  var dim = {
+    width: it.width() + 40,
+    height: it.height() + 60
+  };
+  it.
+    attr({'class': "flora", title: name}).dialog(dim);
+}
+
+function browseContents(x) {
   switch(typeof(x)) {
     case 'function':
-      $(HTML.from({p: {code: x.toString()}})).appendTo('#naked');
-      break;
+      return $(HTML.from({p: {code: x.toString()}}));
     case 'object':
-      browseCompound(x);
-      break;
+      return browseCompound(x);
     default:
-      $(HTML.from({p: x.toString()})).appendTo('#naked');
+      return $(HTML.from({p: x.toString()}));
   }
 }
 
@@ -54,15 +64,14 @@ function browseCompound(x) {
   var jq;
   
   function item(i) {
-    jq = inspector(i, x[i]);
-    // god(window) crashes when trying to hOP native properties, at least in firefox
-    jq.addClass(x == god || x.hasOwnProperty(i) ? 'own' : 'prototype');
+    jq = inspector(x[i], i);
+    jq.addClass(x.hasOwnProperty(i) ? 'own' : 'prototype');
     jq.appendTo(browser);
   }
   for (var index in x) {
     item(index);
   }
-  browser.appendTo('#naked');
+  return browser;
 }
 
 function repr(x) {
@@ -77,13 +86,13 @@ function repr(x) {
   }
 }
 
-function inspector(name, x) {
+function inspector(x, name) {
   var values = [name].concat(repr(x));
   var html = HTML.from({tr: {td: values}});
   var jq = $(html);
   if (browsable(x)) {
     var last = jq.find('td:last');
-    last.click(function() {browse(x);}).addClass('link');
+    last.click(function() {browse(x, name);}).addClass('link');
   }
   return jq;
 }

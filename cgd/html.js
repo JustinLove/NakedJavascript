@@ -29,11 +29,9 @@ Of course normally, it's only used to build fragments.
   function from(structure, tag) {
     var text = "";
     if (CGD.ARRAY.describes(structure)) {
-      for (var i in structure) {
-        if (structure.hasOwnProperty(i)) {
-          text += from(structure[i], tag);
-        }
-      }
+      CGD.ARRAY.forEach(structure, function(x) {
+        text += from(x, tag);
+      });
       return text;
     } else {
       return enclose(tag, nonArray(structure));
@@ -50,11 +48,9 @@ Of course normally, it's only used to build fragments.
     var text = "";
     switch(typeof(structure)) {
       case 'object':
-        for (var tag in structure) {
-          if (structure.hasOwnProperty(tag)) {
-            text += from(structure[tag], tag);
-          }
-        }
+        CGD.OBJECT.forEach(structure, function(x, tag) {
+          text += from(x, tag);
+        });
         return text;
       case 'number':
         return structure.toFixed(2);

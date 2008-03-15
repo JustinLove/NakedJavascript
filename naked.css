@@ -15,6 +15,18 @@ td {
   padding: 5px;
 }
 
+code {
+  display: block;
+  width: 300px;
+}
+
+.browser {
+  border: solid black 0.2em;
+  display: block;
+  min-width: 300px;
+  float: left;
+}
+
 .link {
   color: blue;
 }

@@ -161,20 +161,21 @@ CGD.STRING.capital = function(s) {
   return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();
 };
 
-CGD.ARRAY = CGD.ARRAY || {};
+CGD.OBJECT = CGD.OBJECT || {};
 (function() {
   function publish(s) {
-    CGD.ARRAY[s] = eval(s);
+    CGD.OBJECT[s] = eval(s);
   }
-
-  function describes(what) {
-    return what && // null is an object...
-      typeof(what) == 'object' && 
-      'constructor' in what &&
-      what.constructor === Array;
+  
+  function forEach(what, f) {
+    for (var i in what) {
+      if (what.hasOwnProperty(i)) {
+        f(what[i], i, what);
+      }
+    }
   }
-  publish('describes');
-
+  publish('forEach');
+  
   // Prototype for exception instances.
   var notFound = {
     name: 'Not Found',
@@ -192,31 +193,6 @@ CGD.ARRAY = CGD.ARRAY || {};
   }
   publish('NotFound');
   
-  // As in the DOM class Node; some functions return NodeList,
-  //  'array-like' objects that don't work with our standard iterators.
-  function forEachNode(what, f) {
-    for (var i = 0;i < what.length;i++) {
-      f(what.item(i), i, what);
-    }
-  }
-  publish('forEachNode');
-
-  // ordinary real array objects; use an optimized implementation if we have one
-  if ('forEach' in Array) {
-    function forEach(what, f) {
-      what.forEach(f);
-    }
-  } else {
-    function forEach(what, f) {
-      for (var i in what) {
-        if (what.hasOwnProperty(i)) {
-          f(what[i], i, what);
-        }
-      }
-    }
-  }
-  publish('forEach');
-
   // These are common functions for the search routines keyWhich and valueWhich
   function equals(x) {
     var f = function(y) {
@@ -265,6 +241,46 @@ CGD.ARRAY = CGD.ARRAY || {};
     return what[keyWhich(what, f)];
   }
   publish('valueWhich');
+}());
+
+CGD.ARRAY = CGD.ARRAY || {};
+(function() {
+  function publish(s) {
+    CGD.ARRAY[s] = eval(s);
+  }
+
+  function describes(what) {
+    return what && // null is an object...
+      typeof(what) == 'object' && 
+      'constructor' in what &&
+      what.constructor === Array;
+  }
+  publish('describes');
+
+  
+  // As in the DOM class Node; some functions return NodeList,
+  //  'array-like' objects that don't work with our standard iterators.
+  function forEachNode(what, f) {
+    for (var i = 0;i < what.length;i++) {
+      f(what.item(i), i, what);
+    }
+  }
+  publish('forEachNode');
+
+  // ordinary real array objects; use an optimized implementation if we have one
+  if ('forEach' in Array) {
+    var forEach = Array.forEach;
+//    function forEach(what, f) {
+//      Array.forEach(what, f);
+//    }
+  } else {
+    function forEach(what, f) {
+      for (var i = 0;i < what.length;i++) {
+        f(what[i], i, what);
+      }
+    }
+  }
+  publish('forEach');
   
   // Extends an array to a specified length, by repeating elements
   function extendRepeat(array, to) {
