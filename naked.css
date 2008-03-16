@@ -15,15 +15,12 @@ td {
   padding: 5px;
 }
 
-code {
-  display: block;
-  width: 300px;
+.xbrowser {
+  border: solid black 0.2em;
 }
 
 #naked {
-  border: solid black 0.2em;
   display: block;
-  min-width: 300px;
   float: left;
 }
 

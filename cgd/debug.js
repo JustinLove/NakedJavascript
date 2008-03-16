@@ -208,7 +208,7 @@ CGD.DEBUG.FILTER.timestamp = function() {
         if (typeof(x[i]) == 'function') {
           this.p([i, '*', 'function', x.hasOwnProperty(i)]);
         } else {
-          this.p([i, x[i], typeof(x[i]), x.hasOwnProperty(i)]);
+          this.p([i, x[i] + "", typeof(x[i]), x.hasOwnProperty(i)]);
         }
       } catch (e) {
         this.p(e);

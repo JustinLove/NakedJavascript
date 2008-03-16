@@ -39,16 +39,22 @@ function extendJQ() {
           $(this).parents('.ui-dialog').
             show().hide('slow', function() {$(this).remove();});
         };
-        this.attr({'class': "flora"}).dialog(options).
+        this.addClass('flora').dialog(options).
           parents('.ui-dialog').hide().show('slow');
+        return this;
       },
       tap: function (f) {
         f.call(this);
         return this;
       },
+      print: function() {
+        D(this.attr('class'));
+        return this;
+      },
       toString: function() {
         return '[jQuery ' + this.length + ']';
-      }
+      },
+      noop: function() {return this;} // for breaking chains
     });
 }
 
@@ -73,7 +79,7 @@ browser.prototype = {
       return this.container[this.name];
     } catch (e) {
       this.knownType = 'error';
-      return e.name;
+      return e.name || e;
     }
   },
   type: function() {
@@ -96,16 +102,18 @@ browser.prototype = {
     }
   },
   browse: function() {
-    var it = this.browseContents();
-    it.appendTo('#naked').
-      wrap('<div class="browser"></div>').
-      toDialog({title: this.name});
+    this.browseContents().
+      appendTo('#naked').
+      wrap(document.createElement('div')).parent().
+        attr({'class': 'browser', title: this.name}).
+        toDialog();
     return this;
   },
   browseContents: function() {
     switch(this.type()) {
       case 'function':
         return $(HTML.from({div: {p: {code: this.full()}}})).
+          find('code').addClass('javascript').chili().end().
           append(this.browseCompound());
       case 'object':
         return this.browseCompound();
@@ -119,21 +127,32 @@ browser.prototype = {
     var jq = this.header.clone();
     var v = this.value();
 
-    for (var index in v) {
-      browser(index, v).view().appendTo(jq);
+    try {
+      for (var index in v) {
+        browser(index, v).view().appendTo(jq);
+      }
+    } catch (e) {
+      return browser(0, [e]).browseCompound();
+      //browser('name', e).view().appendTo(jq);
     }
     return jq;
   },
   view: function() {
-    var values = [this.name, this.type(), this.brief()];
-    var html = HTML.from({tr: {td: values}});
-    var jq = $(html).addClass(this.owner()).addClass(this.type());
-    var act = this.action();
-    if (act) {
-      var last = jq.find('td:last');
-      last.click(act).addClass('link');
+    try {
+      var values = [this.name, this.type(), this.brief()];
+      var html = HTML.from({tr: {td: values}});
+      var jq = $(html).addClass(this.owner()).addClass(this.type());
+      var act = this.action();
+      if (act) {
+        var last = jq.find('td:last');
+        last.click(act).addClass('link');
+      }
+      return jq;
+    } catch (e) {
+      var values = [this.name, 'view error', e.name];
+      var html = HTML.from({tr: {td: values}});
+      return $(html).addClass('error');
     }
-    return jq;
   },
   brief: function() {
     switch(this.type()) {
@@ -150,14 +169,8 @@ browser.prototype = {
   },
   action: function() {
     var b = this;
-    switch(this.type()) {
-      case 'string':
-        return function() {b.browse();};
-      default:
-        if (this.browsable()) {
-          return function() {b.browse();};
-        }
-        break;
+    if (this.browsable()) {
+      return function() {b.browse();};
     }
   },
   browsable: function() {
@@ -166,7 +179,7 @@ browser.prototype = {
       case undefined:
         return false;
       default:
-        return this.type() in {'function': true, 'object': true};
+        return this.type() in {'function': true, 'object': true, 'string': true};
     }
   }
 };
