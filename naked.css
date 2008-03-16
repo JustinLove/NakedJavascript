@@ -41,14 +41,6 @@ code {
 }
 
 #debugDiv {
-  xborder-style: dotted;
-  xborder-color: black;
-  xbackground: gray;
-  xposition: absolute;
-  xbottom: 0px;
-  xleft: 0px;
   height: 200px;
-  xwidth: 90%;
   overflow: scroll;
-  xdisplay:none;
 } 

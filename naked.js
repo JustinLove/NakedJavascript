@@ -26,7 +26,7 @@ $(document).ready(function() {
 });
 
 function test() {
-  browse(CGD, 'CGD');
+  browse(CGD, 'CGD', god);
 }
 
 function extendJQ() {
@@ -41,40 +41,53 @@ function extendJQ() {
     });
 }
 
-function browse(x, name) {
-  browseContents(x).
-    appendTo('#naked').
+function browser(name, container) {
+  var b = object(masterBrowser);
+  b.name = name;
+  b.container = container;
+}
+
+var masterBrowser = {
+  name: "",
+  container: null,
+  last: null
+};
+
+function browse(value, name) {
+  var it = browseContents(value, name);
+  it.find("td:contains('error')").parent().addClass('error').end().end();
+  it.appendTo('#naked').
     wrap('<div class="browser"></div>').
     toDialog({title: name});
 }
 
-function browseContents(x) {
-  switch(typeof(x)) {
+function browseContents(value, name) {
+  switch(typeof(value)) {
     case 'function':
-      return $(HTML.from({div: {p: {code: x.toString()}}})).
-        append(browseCompound(x));
+      return $(HTML.from({div: {p: {code: value.toString()}}})).
+        append(browseCompound(value, name));
     case 'object':
-      return browseCompound(x);
+      return browseCompound(value, name);
     case 'string':
-      return $(HTML.from({form: {textarea: x}}));
+      return $(HTML.from({form: {textarea: value}}));
     default:
-      return $(HTML.from({p: x.toString()}));
+      return $(HTML.from({p: value.toString()}));
   }
 }
 
-function browseCompound(x) {
+function browseCompound(value, name) {
   var browser = $(HTML.from({table: {tr: {th: ['Name', 'Type', 'Value']}}}));
   
   function item(i) {
     try {
-      propertyInspector(x, i).appendTo(browser);
+      propertyInspector(value, i).appendTo(browser);
     } catch (e) {
       D(e);
       //DEBUG.dump(e);
-      //D([x, i]);
+      //D([value, i]);
     }
   }
-  for (var index in x) {
+  for (var index in value) {
     item(index);
   }
   return browser;
@@ -92,33 +105,35 @@ function repr(x) {
   }
 }
 
-function action(x, name) {
-  switch(typeof(x)) {
+function action(value, name, container) {
+  switch(typeof(value)) {
     case 'string':
-      return function() {browse(x, name);};
+      return function() {browse(value, name);};
     default:
-      if (browsable(x)) {
-        return function() {browse(x, name);};
+      if (browsable(value)) {
+        return function() {browse(value, name);};
       }
       break;
   }
 }
 
+// the differnent paramters are necessary so we do the object referenece
+//   inside the try block.
 function propertyInspector(container, name) {
   try {
-    return inspector(container[name], name).
+    return inspector(container[name], name, container).
       addClass(container.hasOwnProperty(name) ? 'own' : 'prototype');
   } catch (e) {
     //DEBUG.dump(e);
-    return $(HTML.from({tr: {td: [name, 'error', e.name]}})).addClass('error');
+    return $(HTML.from({tr: {td: [name, 'error', e.name]}}));
   }
 }
 
-function inspector(x, name) {
-  var values = [name].concat(repr(x));
+function inspector(value, name, container) {
+  var values = [name].concat(repr(value));
   var html = HTML.from({tr: {td: values}});
   var jq = $(html);
-  var act = action(x, name);
+  var act = action(value, name, container);
   if (act) {
     var last = jq.find('td:last');
     last.click(act).addClass('link');
