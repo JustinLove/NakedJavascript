@@ -55,7 +55,7 @@ Of course normally, it's only used to build fragments.
       case 'number':
         return structure.toFixed(2);
       default:
-        return structure.toString();
+        return CGD.HTML.escape(structure);
     }
   };
   
@@ -67,6 +67,11 @@ Of course normally, it's only used to build fragments.
     }
   };
 }());
+
+CGD.HTML.escape = function(s) {
+  return s.toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+};
+
 
 // Rest are utility procedures for various tags.
 

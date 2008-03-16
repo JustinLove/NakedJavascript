@@ -27,6 +27,7 @@ $(document).ready(function() {
 
 function test() {
   browser('CGD', god).browse();
+  //browser('body', god.document).browse();
 }
 
 function extendJQ() {
@@ -102,11 +103,11 @@ browser.prototype = {
     }
   },
   browse: function() {
-    this.browseContents().
-      appendTo('#naked').
-      wrap(document.createElement('div')).parent().
-        attr({'class': 'browser', title: this.name}).
-        toDialog();
+    var it = this.browseContents();
+    it.appendTo('#naked');
+    it = it.wrap(document.createElement('div')).parent();
+    it.attr({'class': 'browser', title: this.name});
+    it.toDialog();
     return this;
   },
   browseContents: function() {
@@ -160,6 +161,8 @@ browser.prototype = {
         return '*';
       case 'undefined':
         return 'undefined';
+      case 'string':
+        return '"' + this.value() + '"';
       default:
         return this.value() + "";
     }
