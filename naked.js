@@ -35,24 +35,39 @@ function extendJQ() {
         options = options || {};
         options.width = options.width || this.width() + 50;
         options.height = options.height || this.height() + 80;
+        options.close = function() {
+          $(this).parents('.ui-dialog').
+            show().hide('slow', function() {$(this).remove();});
+        };
         this.attr({'class': "flora"}).dialog(options).
           parents('.ui-dialog').hide().show('slow');
+      },
+      tap: function (f) {
+        f.call(this);
+        return this;
+      },
+      toString: function() {
+        return '[jQuery ' + this.length + ']';
       }
     });
 }
 
 function browser(name, container) {
-  var b = object(masterBrowser);
+  var b = object(browser.prototype);
   b.name = name;
   b.container = container;
   return b;
 }
+CGD['browser'] = browser;
 
-var masterBrowser = {
+browser.prototype = {
   name: "",
   container: null,
   knownType: undefined,
   header: $(HTML.from({table: {tr: {th: ['Name', 'Type', 'Value']}}})),
+  toString: function() {
+    return '[Browser '+this.container+'[' + this.name +'] ]';
+  },
   value: function() {
     try {
       return this.container[this.name];
