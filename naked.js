@@ -26,7 +26,7 @@ $(document).ready(function() {
 });
 
 function test() {
-  browse(CGD, 'CGD', god);
+  browser('CGD', god).browse();
 }
 
 function extendJQ() {
@@ -45,111 +45,116 @@ function browser(name, container) {
   var b = object(masterBrowser);
   b.name = name;
   b.container = container;
+  return b;
 }
 
 var masterBrowser = {
   name: "",
   container: null,
-  last: null
-};
-
-function browse(value, name) {
-  var it = browseContents(value, name);
-  it.find("td:contains('error')").parent().addClass('error').end().end();
-  it.appendTo('#naked').
-    wrap('<div class="browser"></div>').
-    toDialog({title: name});
-}
-
-function browseContents(value, name) {
-  switch(typeof(value)) {
-    case 'function':
-      return $(HTML.from({div: {p: {code: value.toString()}}})).
-        append(browseCompound(value, name));
-    case 'object':
-      return browseCompound(value, name);
-    case 'string':
-      return $(HTML.from({form: {textarea: value}}));
-    default:
-      return $(HTML.from({p: value.toString()}));
-  }
-}
-
-function browseCompound(value, name) {
-  var browser = $(HTML.from({table: {tr: {th: ['Name', 'Type', 'Value']}}}));
-  
-  function item(i) {
+  knownType: undefined,
+  header: $(HTML.from({table: {tr: {th: ['Name', 'Type', 'Value']}}})),
+  value: function() {
     try {
-      propertyInspector(value, i).appendTo(browser);
+      return this.container[this.name];
+    } catch (e) {
+      this.knownType = 'error';
+      return e.name;
+    }
+  },
+  type: function() {
+    if (this.knownType) {
+      return this.knownType;
+    } else {
+      try {
+        return (this.knownType = typeof(this.container[this.name]));
+      } catch (e) {
+        return (this.knownType = 'error');
+      }
+    }
+  },
+  owner: function() {
+    try {
+      return this.container.hasOwnProperty(this.name) ? 'own' : 'prototype';
     } catch (e) {
       D(e);
-      //DEBUG.dump(e);
-      //D([value, i]);
+      return 'error';
+    }
+  },
+  browse: function() {
+    var it = this.browseContents();
+    it.appendTo('#naked').
+      wrap('<div class="browser"></div>').
+      toDialog({title: this.name});
+    return this;
+  },
+  browseContents: function() {
+    switch(this.type()) {
+      case 'function':
+        return $(HTML.from({div: {p: {code: this.full()}}})).
+          append(this.browseCompound());
+      case 'object':
+        return this.browseCompound();
+      case 'string':
+        return $(HTML.from({form: {textarea: this.full()}}));
+      default:
+        return $(HTML.from({p: this.full()}));
+    }
+  },
+  browseCompound: function() {
+    var jq = this.header.clone();
+    var v = this.value();
+
+    for (var index in v) {
+      browser(index, v).view().appendTo(jq);
+    }
+    return jq;
+  },
+  view: function() {
+    var values = [this.name, this.type(), this.brief()];
+    var html = HTML.from({tr: {td: values}});
+    var jq = $(html).addClass(this.owner()).addClass(this.type());
+    var act = this.action();
+    if (act) {
+      var last = jq.find('td:last');
+      last.click(act).addClass('link');
+    }
+    return jq;
+  },
+  brief: function() {
+    switch(this.type()) {
+      case 'function':
+        return '*';
+      case 'undefined':
+        return 'undefined';
+      default:
+        return this.value() + "";
+    }
+  },
+  full: function() {
+    return this.value().toString();
+  },
+  action: function() {
+    var b = this;
+    switch(this.type()) {
+      case 'string':
+        return function() {b.browse();};
+      default:
+        if (this.browsable()) {
+          return function() {b.browse();};
+        }
+        break;
+    }
+  },
+  browsable: function() {
+    switch (this.value()) {
+      case null:
+      case undefined:
+        return false;
+      default:
+        return this.type() in {'function': true, 'object': true};
     }
   }
-  for (var index in value) {
-    item(index);
-  }
-  return browser;
-}
-
-function repr(x) {
-  var t = typeof(x);
-  switch(t) {
-    case 'function':
-      return [t, '*'];
-    case 'undefined':
-      return [t, 'undefined'];
-    default:
-      return [t, x + ""];
-  }
-}
-
-function action(value, name, container) {
-  switch(typeof(value)) {
-    case 'string':
-      return function() {browse(value, name);};
-    default:
-      if (browsable(value)) {
-        return function() {browse(value, name);};
-      }
-      break;
-  }
-}
-
-// the differnent paramters are necessary so we do the object referenece
-//   inside the try block.
-function propertyInspector(container, name) {
-  try {
-    return inspector(container[name], name, container).
-      addClass(container.hasOwnProperty(name) ? 'own' : 'prototype');
-  } catch (e) {
-    //DEBUG.dump(e);
-    return $(HTML.from({tr: {td: [name, 'error', e.name]}}));
-  }
-}
-
-function inspector(value, name, container) {
-  var values = [name].concat(repr(value));
-  var html = HTML.from({tr: {td: values}});
-  var jq = $(html);
-  var act = action(value, name, container);
-  if (act) {
-    var last = jq.find('td:last');
-    last.click(act).addClass('link');
-  }
-  return jq;
-}
-
-function browsable(x) {
-  switch (x) {
-    case null:
-    case undefined:
-      return false;
-    default:
-      return typeof(x) in {'function': true, 'object': true};
-  }
-}
+};
 
 //end CGD.naked
 }());
