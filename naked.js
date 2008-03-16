@@ -51,12 +51,12 @@ function browse(x, name) {
 function browseContents(x) {
   switch(typeof(x)) {
     case 'function':
-      var props = browseCompound(x);
-      var it = $(HTML.from({div: {p: {code: x.toString()}}}));
-      it.append(props);
-      return it;
+      return $(HTML.from({div: {p: {code: x.toString()}}})).
+        append(browseCompound(x));
     case 'object':
       return browseCompound(x);
+    case 'string':
+      return $(HTML.from({form: {textarea: x}}));
     default:
       return $(HTML.from({p: x.toString()}));
   }
@@ -92,6 +92,18 @@ function repr(x) {
   }
 }
 
+function action(x, name) {
+  switch(typeof(x)) {
+    case 'string':
+      return function() {browse(x, name);};
+    default:
+      if (browsable(x)) {
+        return function() {browse(x, name);};
+      }
+      break;
+  }
+}
+
 function propertyInspector(container, name) {
   try {
     return inspector(container[name], name).
@@ -106,9 +118,10 @@ function inspector(x, name) {
   var values = [name].concat(repr(x));
   var html = HTML.from({tr: {td: values}});
   var jq = $(html);
-  if (browsable(x)) {
+  var act = action(x, name);
+  if (act) {
     var last = jq.find('td:last');
-    last.click(function() {browse(x, name);}).addClass('link');
+    last.click(act).addClass('link');
   }
   return jq;
 }
