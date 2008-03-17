@@ -26,7 +26,7 @@ $(document).ready(function() {
 });
 
 function test() {
-  browser('Test & Credits', {'Test & Credits': {
+  var test = {
     jQuery: "http://jquery.com",
     'jQuery.ui': "http://ui.jquery.com",
     chili: "http://noteslog.com/chili/",
@@ -43,7 +43,9 @@ function test() {
       a: [1, 2, 3]
     },
     victim: document.getElementById('victim').childNodes[0]
-  }}).browse();
+  };
+  browser(0, [test]).browse({title: 'Test & Credtis', position: 'right'});
+  browser('playground', test).browse();
   //browser('nodeValue', document.getElementById('victim').childNodes[0]).browse();
   //browser('body', god.document).browse();
 }
@@ -144,12 +146,12 @@ browser.prototype = {
       return 'error';
     }
   },
-  browse: function() {
+  browse: function(dialogOptions) {
     var it = this.browseContents();
     it.appendTo('#naked');
     it = it.wrap(document.createElement('div')).parent();
     it.attr({'class': 'browser', title: this.name});
-    it.toDialog();
+    it.toDialog(dialogOptions);
     return this;
   },
   browseContents: function() {
@@ -192,42 +194,55 @@ browser.prototype = {
   },
   view: function() {
     try {
-      var values = [this.name, this.type(), this.brief()];
+      var values = [this.name, this.type(), {span: this.brief()}];
       var html = HTML.from({tr: {td: values}});
       var jq = $(html).addClass(this.owner()).addClass(this.type());
-      var act = this.action();
-      if (act) {
-        var last = jq.find('td:last');
-        last.click(act).addClass('link');
-      }
-      if (this.editable()) {
-        var b = this;
-        var last = jq.find('td:last');
-        last.wrapInner(document.createElement('span'));
-        var c = last.children();
-        // blank strings don't give us an element to wrap
-        if (c.length < 1) {
-          last.append(document.createElement('span'));
-          c = last.children();
-        }
-        c.editInPlace({
-            default_text: "",
-            callback: function(id, n, old, params) {
-              var v = b.coerce(n);
-              if (typeof(v) === b.type()) {
-                return b.value(n);
-              } else {
-                return old;
-              }
-            }
-          }).addClass('link');
-      }
+      this.make_actionable(jq.find('td:last span'));
       return jq;
     } catch (e) {
+      D(e);
       var values = [this.name, 'view error', e.name];
       var html = HTML.from({tr: {td: values}});
       return $(html).addClass('error');
     }
+  },
+  make_actionable: function(jq) {
+    switch(this.value()) {
+      case null:
+      case undefined:
+        return jq;
+      default:
+        switch(this.type()) {
+          case 'function':
+          case 'object':
+            return this.make_browseable(jq);
+          case 'string':
+          case 'number':
+            return this.make_editable(jq);
+          default:
+            return jq;
+        }
+    }
+  },
+  make_browseable: function(jq) {
+    var b = this;
+    return jq.click(function() {b.browse();}).addClass('link');
+  },
+  make_editable: function(jq) {
+    var b = this;
+    // chili doesn't pretty-print function() syntax
+    function commit(id, neu, old, params) {
+      var v = b.coerce(neu);
+      if (typeof(v) === b.type()) {
+        return b.value(neu);
+      } else {
+        return old;
+      }
+    };
+    return jq.editInPlace({
+        default_text: "",
+        callback: commit
+      }).addClass('link');
   },
   brief: function() {
     switch(this.type()) {
@@ -241,30 +256,6 @@ browser.prototype = {
   },
   full: function() {
     return this.value().toString();
-  },
-  action: function() {
-    var b = this;
-    if (this.browsable()) {
-      return function() {b.browse();};
-    }
-  },
-  browsable: function() {
-    switch (this.value()) {
-      case null:
-      case undefined:
-        return false;
-      default:
-        return this.type() in {'function': true, 'object': true};
-    }
-  },
-  editable: function() {
-    switch (this.value()) {
-      case null:
-      case undefined:
-        return false;
-      default:
-        return this.type() in {'string': true, 'number': true};
-    }
   }
 };
 
