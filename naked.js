@@ -26,7 +26,25 @@ $(document).ready(function() {
 });
 
 function test() {
-  browser('CGD', god).browse();
+  browser('Test & Credits', {'Test & Credits': {
+    jQuery: "http://jquery.com",
+    'jQuery.ui': "http://ui.jquery.com",
+    chili: "http://noteslog.com/chili/",
+    editInPlace: "http://davehauenstein.com/blog/archives/28",
+    CGD: CGD,
+    god: god,
+    playground: {
+      n: 42,
+      s: "blarg",
+      b: "",
+      f: function(x, y) {return x + y;},
+      x: null,
+      u: undefined,
+      a: [1, 2, 3]
+    },
+    victim: document.getElementById('victim').childNodes[0]
+  }}).browse();
+  //browser('nodeValue', document.getElementById('victim').childNodes[0]).browse();
   //browser('body', god.document).browse();
 }
 
@@ -75,12 +93,20 @@ browser.prototype = {
   toString: function() {
     return '[Browser '+this.container+'[' + this.name +'] ]';
   },
-  value: function() {
-    try {
-      return this.container[this.name];
-    } catch (e) {
-      this.knownType = 'error';
-      return e.name || e;
+  value: function(set) {
+    if (arguments.length == 1) {
+      try {
+        return this.container[this.name] = set;
+      } catch (e) {
+        return this.value();
+      }
+    } else {
+      try {
+        return this.container[this.name];
+      } catch (e) {
+        this.knownType = 'error';
+        return e.name || e;
+      }
     }
   },
   type: function() {
@@ -92,6 +118,22 @@ browser.prototype = {
       } catch (e) {
         return (this.knownType = 'error');
       }
+    }
+  },
+  coerce: function(s) {
+    switch(this.type()) {
+      case 'string':
+        return s + "";
+      case 'number':
+        var n = parseInt(s, 10);
+        return isNaN(n) ? undefined : n;
+      case 'function':
+      case 'object':
+        return eval(s);
+      case 'error':
+        return undefined;
+      default:
+        return v;
     }
   },
   owner: function() {
@@ -118,11 +160,21 @@ browser.prototype = {
           append(this.browseCompound());
       case 'object':
         return this.browseCompound();
-      case 'string':
-        return $(HTML.from({form: {textarea: this.full()}}));
       default:
-        return $(HTML.from({p: this.full()}));
+        return this.browseOne();
+        //return $(HTML.from({p: this.full()}));
     }
+  },
+  browseOne: function() {
+    var jq = this.header.clone();
+
+    try {
+      this.view().appendTo(jq);
+    } catch (e) {
+      return browser(0, [e]).browseCompound();
+      //browser('name', e).view().appendTo(jq);
+    }
+    return jq;
   },
   browseCompound: function() {
     var jq = this.header.clone();
@@ -148,6 +200,28 @@ browser.prototype = {
         var last = jq.find('td:last');
         last.click(act).addClass('link');
       }
+      if (this.editable()) {
+        var b = this;
+        var last = jq.find('td:last');
+        last.wrapInner(document.createElement('span'));
+        var c = last.children();
+        // blank strings don't give us an element to wrap
+        if (c.length < 1) {
+          last.append(document.createElement('span'));
+          c = last.children();
+        }
+        c.editInPlace({
+            default_text: "",
+            callback: function(id, n, old, params) {
+              var v = b.coerce(n);
+              if (typeof(v) === b.type()) {
+                return b.value(n);
+              } else {
+                return old;
+              }
+            }
+          }).addClass('link');
+      }
       return jq;
     } catch (e) {
       var values = [this.name, 'view error', e.name];
@@ -158,11 +232,9 @@ browser.prototype = {
   brief: function() {
     switch(this.type()) {
       case 'function':
-        return '*';
+        return (this.value() + "").match(/\(.*\)/);
       case 'undefined':
         return 'undefined';
-      case 'string':
-        return '"' + this.value() + '"';
       default:
         return this.value() + "";
     }
@@ -182,7 +254,16 @@ browser.prototype = {
       case undefined:
         return false;
       default:
-        return this.type() in {'function': true, 'object': true, 'string': true};
+        return this.type() in {'function': true, 'object': true};
+    }
+  },
+  editable: function() {
+    switch (this.value()) {
+      case null:
+      case undefined:
+        return false;
+      default:
+        return this.type() in {'string': true, 'number': true};
     }
   }
 };

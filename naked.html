@@ -1,5 +1,5 @@
 <html>
-
+<title>Naked Javascript</title>
 <head>
 
 <style type="text/css">
@@ -17,6 +17,7 @@
 <script type='text/javascript' src='jquery/ui.dialog.js' charset='utf-8'></script>
 <script type='text/javascript' src='jquery/jquery.chili.pack.js' charset='utf-8'></script>
 <script type='text/javascript' src='jquery/recipes.js' charset='utf-8'></script>
+<script type='text/javascript' src='jquery/jquery.inplace.source.js' charset='utf-8'></script>
 
 <script type='text/javascript' src='cgd/debug.js' charset='utf-8'></script>
 <script type='text/javascript' src='cgd/js.js' charset='utf-8'></script>
@@ -28,7 +29,9 @@
 </head>
 
 <body>
-  <div id='naked'>Get Naked</div>
+  <h3 id="victim">Get Naked</h3>
+  <p>'victim' is a reference to the above DOM element.  You can change it's text by editing victim.nodeValue.  Or, if you prefer, god.document.body.childNodes.1(HeadingElement).childNodes.0.nodeValue.  But I figured I'd save you some typing  ;^)</p></div>
+  <div id='naked'></div>
   <div id='debugDiv'></div>
 </body>
 

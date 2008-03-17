@@ -15,10 +15,6 @@ td {
   padding: 5px;
 }
 
-.xbrowser {
-  border: solid black 0.2em;
-}
-
 #naked {
   display: block;
   float: left;
@@ -37,7 +33,13 @@ td {
   color: red;
 }
 
+.string span:before,
+.string span:after {
+  content: '"';
+}
+
 #debugDiv {
+  width: 90%;
   height: 200px;
   overflow: scroll;
 } 
