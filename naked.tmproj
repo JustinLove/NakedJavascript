@@ -3,64 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>.hgignore</string>
+	<string>naked.html</string>
 	<key>documents</key>
 	<array>
-		<dict>
-			<key>filename</key>
-			<string>naked.css</string>
-			<key>lastUsed</key>
-			<date>2008-03-16T02:41:46Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>naked.html</string>
-			<key>lastUsed</key>
-			<date>2008-03-16T03:56:01Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>../package.sh</string>
-			<key>lastUsed</key>
-			<date>2008-02-03T21:48:07Z</date>
-		</dict>
-		<dict>
-			<key>children</key>
-			<array>
-				<dict>
-					<key>filename</key>
-					<string>cgd/debug.js</string>
-					<key>lastUsed</key>
-					<date>2008-03-15T17:57:06Z</date>
-				</dict>
-				<dict>
-					<key>filename</key>
-					<string>cgd/js.js</string>
-					<key>lastUsed</key>
-					<date>2008-03-15T15:08:20Z</date>
-				</dict>
-				<dict>
-					<key>filename</key>
-					<string>cgd/html.js</string>
-					<key>lastUsed</key>
-					<date>2008-03-15T15:08:41Z</date>
-				</dict>
-			</array>
-			<key>expanded</key>
-			<true/>
-			<key>name</key>
-			<string>cgd</string>
-		</dict>
-		<dict>
-			<key>expanded</key>
-			<true/>
-			<key>name</key>
-			<string>jquery</string>
-			<key>regexFolderFilter</key>
-			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
-			<key>sourceDirectory</key>
-			<string>jquery</string>
-		</dict>
 		<dict>
 			<key>name</key>
 			<string>cgd</string>
@@ -70,30 +15,64 @@
 			<string>../cgd</string>
 		</dict>
 		<dict>
-			<key>filename</key>
-			<string>naked.js</string>
-			<key>lastUsed</key>
-			<date>2008-03-16T03:52:22Z</date>
+			<key>name</key>
+			<string>chili</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string>../chili-1.9_0/chili</string>
+		</dict>
+		<dict>
+			<key>expanded</key>
+			<true/>
+			<key>name</key>
+			<string>naked</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>expanded</key>
+			<true/>
+			<key>name</key>
+			<string>jquery</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string>../jquery</string>
 		</dict>
 		<dict>
 			<key>filename</key>
-			<string>.hgignore</string>
+			<string>../package.sh</string>
 			<key>lastUsed</key>
-			<date>2008-03-16T04:03:43Z</date>
-			<key>selected</key>
-			<true/>
+			<date>2008-03-17T03:04:11Z</date>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>200</integer>
 	<key>metaData</key>
 	<dict>
+		<key>../jquery/jquery.inplace.source.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>15</integer>
+				<key>line</key>
+				<integer>256</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>237</integer>
+		</dict>
 		<key>../package.sh</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>49</integer>
+				<integer>5</integer>
 				<key>line</key>
 				<integer>7</integer>
 			</dict>
@@ -102,130 +81,102 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>.hgignore</key>
+		<key>jquery/jquery.inplace.source.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>10</integer>
+				<integer>29</integer>
 				<key>line</key>
-				<integer>1</integer>
+				<integer>85</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>cgd/debug.js</key>
-		<dict>
-			<key>caret</key>
+			<integer>127</integer>
+			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
 				<integer>19</integer>
 				<key>line</key>
-				<integer>212</integer>
+				<integer>85</integer>
 			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>180</integer>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>29</integer>
+				<key>line</key>
+				<integer>85</integer>
+			</dict>
 		</dict>
-		<key>cgd/html.js</key>
+		<key>jquery/recipes.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
 				<integer>18</integer>
-				<key>line</key>
-				<integer>50</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>26</integer>
-		</dict>
-		<key>cgd/js.js</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>175</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>152</integer>
-		</dict>
-		<key>jquery/ui.dialog.js</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>53</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>71</integer>
+			<integer>18</integer>
 		</dict>
 		<key>naked.css</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>6</integer>
 				<key>line</key>
-				<integer>45</integer>
+				<integer>35</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>9</integer>
+			<integer>8</integer>
 		</dict>
 		<key>naked.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>55</integer>
+				<integer>94</integer>
 				<key>line</key>
-				<integer>14</integer>
+				<integer>16</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>6</integer>
 		</dict>
 		<key>naked.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>38</integer>
+				<integer>24</integer>
 				<key>line</key>
-				<integer>51</integer>
+				<integer>243</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>40</integer>
+			<integer>221</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>naked.html</string>
-		<string>naked.css</string>
 		<string>naked.js</string>
-		<string>jquery/ui.dialog.js</string>
-		<string>.hgignore</string>
-		<string>cgd/html.js</string>
-		<string>cgd/js.js</string>
-		<string>cgd/debug.js</string>
+		<string>../jquery/jquery.inplace.source.js</string>
 		<string>../package.sh</string>
+		<string>naked.html</string>
+		<string>jquery/jquery.inplace.source.js</string>
+		<string>jquery/recipes.js</string>
+		<string>naked.css</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
