@@ -1,7 +1,7 @@
-CGD.JS.require("style/naked.css");
-
-CGD.JS.require.under('script', function() {
+CGD.JS.require.expect('script', function() {
   var r = CGD.JS.require;
+  r("../style/naked.css");
+
   r.under('jquery', function() {
     r("recipes.css");
     r("themes/flora/flora.all.css");
@@ -16,13 +16,13 @@ CGD.JS.require.under('script', function() {
     r('recipes.js');
     r('jquery.inplace.source.js');
   });
-  
+
   r.under('cgd', function() {
     r('debug.js');
     r('js.js');
     r('html.js');
   });
-  
+
   r('naked.js'); 
 });
 
