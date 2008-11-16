@@ -1,45 +1,31 @@
-body {
-}
-
-table {
+.browser table {
   background-color: gray;
   padding: 5px;
   border-spacing: 0.1em 0.2em;
 }
 
-tr {
+.browser tr {
   background-color: white;
 }
 
-td {
+.browser td {
   padding: 5px;
 }
 
-#naked {
-  display: block;
-  float: left;
-}
-
-.link {
+.browser .link {
   color: blue;
 }
 
-.prototype {
+.browser .prototype {
   color: gray;
 }
 
-.possibleNative,
-.error {
+.browser .possibleNative,
+.browser .error {
   color: red;
 }
 
-.string span:before,
-.string span:after {
+.browser .string span:before,
+.browser .string span:after {
   content: '"';
 }
-
-#debugDiv {
-  width: 90%;
-  height: 200px;
-  overflow: scroll;
-} 
