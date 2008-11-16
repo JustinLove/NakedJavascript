@@ -1,19 +1,20 @@
-CGD.JS.require("naked.css");
-CGD.JS.require("jquery/recipes.css");
-CGD.JS.require("jquery/themes/flora/flora.all.css");
+CGD.JS.require("style/naked.css");
 
-CGD.JS.require('jquery/jquery-1.2.3.js');
-CGD.JS.require('jquery/jquery.dimensions.js');
-CGD.JS.require('jquery/ui.mouse.js');
-CGD.JS.require('jquery/ui.draggable.js');
-CGD.JS.require('jquery/ui.resizable.js');
-CGD.JS.require('jquery/ui.dialog.js');
-CGD.JS.require('jquery/jquery.chili.pack.js');
-CGD.JS.require('jquery/recipes.js');
-CGD.JS.require('jquery/jquery.inplace.source.js');
+CGD.JS.require("script/script/jquery/recipes.css");
+CGD.JS.require("script/jquery/themes/flora/flora.all.css");
 
-CGD.JS.require('cgd/debug.js');
-CGD.JS.require('cgd/js.js');
-CGD.JS.require('cgd/html.js');
-CGD.JS.require('naked.js');
+CGD.JS.require('script/jquery/jquery-1.2.3.js');
+CGD.JS.require('script/jquery/jquery.dimensions.js');
+CGD.JS.require('script/jquery/ui.mouse.js');
+CGD.JS.require('script/jquery/ui.draggable.js');
+CGD.JS.require('script/jquery/ui.resizable.js');
+CGD.JS.require('script/jquery/ui.dialog.js');
+CGD.JS.require('script/jquery/jquery.chili.pack.js');
+CGD.JS.require('script/jquery/recipes.js');
+CGD.JS.require('script/jquery/jquery.inplace.source.js');
+
+CGD.JS.require('script/cgd/debug.js');
+CGD.JS.require('script/cgd/js.js');
+CGD.JS.require('script/cgd/html.js');
+CGD.JS.require('script/naked.js');
 
