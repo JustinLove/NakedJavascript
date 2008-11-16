@@ -1,20 +1,28 @@
 CGD.JS.require("style/naked.css");
 
-CGD.JS.require("script/script/jquery/recipes.css");
-CGD.JS.require("script/jquery/themes/flora/flora.all.css");
+CGD.JS.require.under('script', function() {
+  var r = CGD.JS.require;
+  r.under('jquery', function() {
+    r("recipes.css");
+    r("themes/flora/flora.all.css");
 
-CGD.JS.require('script/jquery/jquery-1.2.3.js');
-CGD.JS.require('script/jquery/jquery.dimensions.js');
-CGD.JS.require('script/jquery/ui.mouse.js');
-CGD.JS.require('script/jquery/ui.draggable.js');
-CGD.JS.require('script/jquery/ui.resizable.js');
-CGD.JS.require('script/jquery/ui.dialog.js');
-CGD.JS.require('script/jquery/jquery.chili.pack.js');
-CGD.JS.require('script/jquery/recipes.js');
-CGD.JS.require('script/jquery/jquery.inplace.source.js');
-
-CGD.JS.require('script/cgd/debug.js');
-CGD.JS.require('script/cgd/js.js');
-CGD.JS.require('script/cgd/html.js');
-CGD.JS.require('script/naked.js');
+    r('jquery-1.2.3.js');
+    r('jquery.dimensions.js');
+    r('ui.mouse.js');
+    r('ui.draggable.js');
+    r('ui.resizable.js');
+    r('ui.dialog.js');
+    r('jquery.chili.pack.js');
+    r('recipes.js');
+    r('jquery.inplace.source.js');
+  });
+  
+  r.under('cgd', function() {
+    r('debug.js');
+    r('js.js');
+    r('html.js');
+  });
+  
+  r('naked.js'); 
+});
 
