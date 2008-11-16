@@ -22,7 +22,7 @@ CGD.JS = CGD.JS || {};
     if (type) {
       return type;
     } else {
-      switch (file.match(/\.(\S*)/)[1]) {
+      switch (file.match(/\.(\w*)$/)[1]) {
         case 'js': return 'text/javascript';
         case 'css': return 'text/css';
         default: return null;
