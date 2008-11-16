@@ -75,7 +75,9 @@ CGD.DEBUG.BACKEND.store_factory = function(max) {
   return {
     buffer: buffer,
     p: function(str) {
-      buffer.push(str);
+      // force string conversion - otherwise we might keep a reference
+      //  to a modifiable object.
+      buffer.push(str + "");
       if (max && buffer.length > max) {
         buffer.shift();
       }
@@ -108,7 +110,24 @@ CGD.DEBUG.FILTER.timestamp = function() {
     process: function(str){
       return [deltaTime(), str];
     },
-    dt: deltaTime
+    dt: deltaTime,
+    from: startTime
+  };
+}();
+
+CGD.DEBUG.FILTER.brackets = function() {
+  return {
+    process: function(str){
+      if (CGD.ARRAY.describes(str)) {
+        var a = new Array(str.length);
+        for (var i = 0; i < str.length;i++) {
+          a[i] = CGD.DEBUG.FILTER.brackets.process(str[i]);
+        }
+        return '[' + a.join(',') + ']';
+      } else {
+        return str;
+      }
+    }
   };
 }();
 
@@ -136,6 +155,12 @@ CGD.DEBUG.FILTER.timestamp = function() {
     backend.p(str);
   }
   CGD.DEBUG['p'] = print;
+  
+  function header(str, mark) {
+    var bar = mark + mark + mark;
+    print(bar + ' ' + str + ' ' + bar);
+  }
+  CGD.DEBUG['header'] = header;
   
   function switchBackend(s_to) {
     // s_ string, o_ object
@@ -202,16 +227,16 @@ CGD.DEBUG.FILTER.timestamp = function() {
 
   // shallow list of all propreties
   function dump(x) {
-    this.p(x);
+    print(x);
     for (var i in x) {
       try {
         if (typeof(x[i]) == 'function') {
-          this.p([i, '*', 'function', x.hasOwnProperty(i)]);
+          print([i, '*', 'function', x.hasOwnProperty(i)]);
         } else {
-          this.p([i, x[i] + "", typeof(x[i]), x.hasOwnProperty(i)]);
+          print([i, x[i] + "", typeof(x[i]), x.hasOwnProperty(i)]);
         }
       } catch (e) {
-        this.p(e);
+        print(e);
       }
     }
   }
@@ -221,3 +246,4 @@ CGD.DEBUG.FILTER.timestamp = function() {
 // current default backend should be 'store'
 CGD.DEBUG.electBackend();
 CGD.DEBUG.on();
+CGD.DEBUG.addFilter('brackets');
