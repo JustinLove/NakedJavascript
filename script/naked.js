@@ -52,31 +52,31 @@ function test() {
 
 function extendJQ() {
   $.fn.extend({
-      toDialog: function(options) {
-        options = options || {};
-        options.width = options.width || this.width() + 50;
-        options.height = options.height || this.height() + 80;
-        options.close = function() {
-          $(this).parents('.ui-dialog').
-            show().hide('slow', function() {$(this).remove();});
-        };
-        this.addClass('flora').dialog(options).
-          parents('.ui-dialog').hide().show('slow');
-        return this;
-      },
-      tap: function (f) {
-        f.call(this);
-        return this;
-      },
-      print: function() {
-        D(this.attr('class'));
-        return this;
-      },
-      toString: function() {
-        return '[jQuery ' + this.length + ']';
-      },
-      noop: function() {return this;} // for breaking chains
-    });
+    toDialog: function(options) {
+      options = options || {};
+      options.width = options.width || this.width() + 50;
+      options.height = options.height || this.height() + 80;
+      options.close = function() {
+        $(this).parents('.ui-dialog').
+          show().hide('slow', function() {$(this).remove();});
+      };
+      this.addClass('flora').dialog(options).
+        parents('.ui-dialog').hide().show('slow');
+      return this;
+    },
+    tap: function (f) {
+      f.call(this);
+      return this;
+    },
+    print: function() {
+      D(this.attr('class'));
+      return this;
+    },
+    toString: function() {
+      return '[jQuery ' + this.length + ']';
+    },
+    noop: function() {return this;} // for breaking chains
+  });
 }
 
 function browser(name, container) {
