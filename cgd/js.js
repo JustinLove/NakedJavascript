@@ -42,14 +42,27 @@ CGD.JS = CGD.JS || {};
     }
     document.getElementsByTagName('head')[0].appendChild(element);
   }
+  
+  function guessFileType(file, type) {
+    if (type) {
+      return type;
+    } else {
+      switch (file.match(/\.(\S*)/)[1]) {
+        case 'js': return 'text/javascript';
+        case 'css': return 'text/css';
+        default: return null;
+      }
+    }
+  }
 
   function include(file, type) {
-    switch (type) {
+    var inferredType = guessFileType(file, type);
+    switch (inferredType) {
       case 'text/javascript':
-        addTagToHead('script', {src: file, type: type, language: 'javascript'});
+        addTagToHead('script', {src: file, type: inferredType, language: 'javascript'});
         break;
       case 'text/css':
-        addTagToHead('link', {href: file, type: type, rel: 'stylesheet'});
+        addTagToHead('link', {href: file, type: inferredType, rel: 'stylesheet'});
         break;
       default:
         throw "Don't know how to include " + type;
