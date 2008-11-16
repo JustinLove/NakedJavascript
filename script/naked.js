@@ -17,9 +17,7 @@ function D(str) {
 };
 
 //necessary
-$(document).ready(function() {
-  extendJQ();
-});
+$(document).ready(extendJQ);
 
 //testing
 $(document).ready(function() {
