@@ -1,3 +1,7 @@
+CGD.JS.require("naked.css");
+CGD.JS.require("jquery/recipes.css");
+CGD.JS.require("jquery/themes/flora/flora.all.css");
+
 CGD.JS.require('jquery/jquery-1.2.3.js');
 CGD.JS.require('jquery/jquery.dimensions.js');
 CGD.JS.require('jquery/ui.mouse.js');
