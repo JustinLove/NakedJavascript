@@ -16,8 +16,13 @@ function D(str) {
   DEBUG.p(str);
 };
 
+//necessary
 $(document).ready(function() {
   extendJQ();
+});
+
+//testing
+$(document).ready(function() {
   $('#debugDiv').toDialog({position: 'bottom', title: 'Debug'});
   DEBUG.onload();
   DEBUG.on();
