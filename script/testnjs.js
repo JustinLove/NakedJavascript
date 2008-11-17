@@ -27,7 +27,9 @@ CGD.TEST.njs.data = {
     f: function(x, y) {return x + y;},
     x: null,
     u: undefined,
-    a: [1, 2, 3]
+    a: [1, 2, 3],
+    o: {},
+    h: {toString: function() {return "";}}
   },
   victim: 'to be defined later'
 };
