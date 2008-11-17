@@ -208,6 +208,7 @@ browser.test.data = {
   chili: "http://noteslog.com/chili/",
   editInPlace: "http://davehauenstein.com/blog/archives/28",
   CGD: CGD,
+  nakedjs: browser,
   god: god,
   playground: {
     n: 42,
