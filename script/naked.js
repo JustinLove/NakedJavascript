@@ -16,72 +16,6 @@ function D(str) {
   DEBUG.p(str);
 };
 
-//necessary
-$(document).ready(extendJQ);
-
-//testing
-$(document).ready(function() {
-  $('#debugDiv').toDialog({position: 'bottom', title: 'Debug'});
-  DEBUG.onload();
-  DEBUG.on();
-  D('test');
-  test();
-});
-
-function test() {
-  var test = {
-    jQuery: "http://jquery.com",
-    'jQuery.ui': "http://ui.jquery.com",
-    chili: "http://noteslog.com/chili/",
-    editInPlace: "http://davehauenstein.com/blog/archives/28",
-    CGD: CGD,
-    god: god,
-    playground: {
-      n: 42,
-      s: "blarg",
-      b: "",
-      f: function(x, y) {return x + y;},
-      x: null,
-      u: undefined,
-      a: [1, 2, 3]
-    },
-    victim: document.getElementById('victim').childNodes[0]
-  };
-  browser(0, [test]).browse({title: 'Test & Credtis', position: 'right'});
-  browser('playground', test).browse();
-  //browser('nodeValue', document.getElementById('victim').childNodes[0]).browse();
-  //browser('body', god.document).browse();
-}
-
-function extendJQ() {
-  $.fn.extend({
-    toDialog: function(options) {
-      options = options || {};
-      options.width = options.width || this.width() + 50;
-      options.height = options.height || this.height() + 80;
-      options.close = function() {
-        $(this).parents('.ui-dialog').
-          show().hide('slow', function() {$(this).remove();});
-      };
-      this.addClass('flora').dialog(options).
-        parents('.ui-dialog').hide().show('slow');
-      return this;
-    },
-    tap: function (f) {
-      f.call(this);
-      return this;
-    },
-    print: function() {
-      D(this.attr('class'));
-      return this;
-    },
-    toString: function() {
-      return '[jQuery ' + this.length + ']';
-    },
-    noop: function() {return this;} // for breaking chains
-  });
-}
-
 function browser(name, container) {
   var b = object(browser.prototype);
   b.name = name;
@@ -261,6 +195,72 @@ browser.prototype = {
     return this.value().toString();
   }
 };
+
+//necessary
+$(document).ready(extendJQ);
+
+//testing
+$(document).ready(function() {
+  $('#debugDiv').toDialog({position: 'bottom', title: 'Debug'});
+  DEBUG.onload();
+  DEBUG.on();
+  D('test');
+  test();
+});
+
+function test() {
+  var test = {
+    jQuery: "http://jquery.com",
+    'jQuery.ui': "http://ui.jquery.com",
+    chili: "http://noteslog.com/chili/",
+    editInPlace: "http://davehauenstein.com/blog/archives/28",
+    CGD: CGD,
+    god: god,
+    playground: {
+      n: 42,
+      s: "blarg",
+      b: "",
+      f: function(x, y) {return x + y;},
+      x: null,
+      u: undefined,
+      a: [1, 2, 3]
+    },
+    victim: document.getElementById('victim').childNodes[0]
+  };
+  browser(0, [test]).browse({title: 'Test & Credtis', position: 'right'});
+  browser('playground', test).browse();
+  //browser('nodeValue', document.getElementById('victim').childNodes[0]).browse();
+  //browser('body', god.document).browse();
+}
+
+function extendJQ() {
+  $.fn.extend({
+    toDialog: function(options) {
+      options = options || {};
+      options.width = options.width || this.width() + 50;
+      options.height = options.height || this.height() + 80;
+      options.close = function() {
+        $(this).parents('.ui-dialog').
+          show().hide('slow', function() {$(this).remove();});
+      };
+      this.addClass('flora').dialog(options).
+        parents('.ui-dialog').hide().show('slow');
+      return this;
+    },
+    tap: function (f) {
+      f.call(this);
+      return this;
+    },
+    print: function() {
+      D(this.attr('class'));
+      return this;
+    },
+    toString: function() {
+      return '[jQuery ' + this.length + ']';
+    },
+    noop: function() {return this;} // for breaking chains
+  });
+}
 
 //end CGD.naked
 }());
