@@ -190,8 +190,15 @@ browser.prototype = {
         return (this.value() + "").match(/\(.*\)/);
       case 'undefined':
         return 'undefined';
+      case 'string':
+        return this.value();
       default:
-        return this.value() + "";
+        var s = this.value() + "";
+        if (s == "") {
+          return "--blank rep--";
+        } else {
+          return s;
+        }
     }
   },
   full: function() {
