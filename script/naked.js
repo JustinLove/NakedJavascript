@@ -255,14 +255,16 @@ browser.extendJQ.fn = {
 //necessary
 $(document).ready(browser.extendJQ);
 
-//testing
-$(document).ready(function() {
+browser.initTest = function() {
   $('#debugDiv').toDialog({position: 'bottom', title: 'Debug'});
   DEBUG.onload();
   DEBUG.on();
   D('test');
   browser.test();
-});
+};
+
+//testing
+$(document).ready(browser.initTest);
 
 //end CGD.naked
 }());
