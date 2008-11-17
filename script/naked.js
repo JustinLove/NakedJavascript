@@ -197,28 +197,28 @@ browser.prototype = {
 };
 
 browser.test = function () {
-  var test = {
-    jQuery: "http://jquery.com",
-    'jQuery.ui': "http://ui.jquery.com",
-    chili: "http://noteslog.com/chili/",
-    editInPlace: "http://davehauenstein.com/blog/archives/28",
-    CGD: CGD,
-    god: god,
-    playground: {
-      n: 42,
-      s: "blarg",
-      b: "",
-      f: function(x, y) {return x + y;},
-      x: null,
-      u: undefined,
-      a: [1, 2, 3]
-    },
-    victim: document.getElementById('victim').childNodes[0]
-  };
-  browser(0, [test]).browse({title: 'Test & Credtis', position: 'right'});
-  browser('playground', test).browse();
+  browser('data', browser.test).browse({title: 'Test & Credits', position: 'right'});
+  browser('playground', browser.test.data).browse();
   //browser('nodeValue', document.getElementById('victim').childNodes[0]).browse();
   //browser('body', god.document).browse();
+};
+browser.test.data = {
+  jQuery: "http://jquery.com",
+  'jQuery.ui': "http://ui.jquery.com",
+  chili: "http://noteslog.com/chili/",
+  editInPlace: "http://davehauenstein.com/blog/archives/28",
+  CGD: CGD,
+  god: god,
+  playground: {
+    n: 42,
+    s: "blarg",
+    b: "",
+    f: function(x, y) {return x + y;},
+    x: null,
+    u: undefined,
+    a: [1, 2, 3]
+  },
+  victim: document.getElementById('victim').childNodes[0]
 };
 
 function extendJQ() {
