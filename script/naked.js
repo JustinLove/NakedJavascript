@@ -196,18 +196,6 @@ browser.prototype = {
   }
 };
 
-//necessary
-$(document).ready(extendJQ);
-
-//testing
-$(document).ready(function() {
-  $('#debugDiv').toDialog({position: 'bottom', title: 'Debug'});
-  DEBUG.onload();
-  DEBUG.on();
-  D('test');
-  test();
-});
-
 function test() {
   var test = {
     jQuery: "http://jquery.com",
@@ -261,6 +249,18 @@ function extendJQ() {
     noop: function() {return this;} // for breaking chains
   });
 }
+
+//necessary
+$(document).ready(extendJQ);
+
+//testing
+$(document).ready(function() {
+  $('#debugDiv').toDialog({position: 'bottom', title: 'Debug'});
+  DEBUG.onload();
+  DEBUG.on();
+  D('test');
+  test();
+});
 
 //end CGD.naked
 }());
