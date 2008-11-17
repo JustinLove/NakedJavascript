@@ -1,3 +1,6 @@
+// Creative Commons Attribution-Share Alike 3.0 Unported Licence
+// http://creativecommons.org/licenses/by-sa/3.0/
+
 // Global Object Definitions ;^)
 CGD.god = window;
 
