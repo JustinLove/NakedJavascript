@@ -197,6 +197,7 @@ browser.prototype = {
 };
 
 browser.test = function () {
+  browser.test.data.victim = document.getElementById('victim').childNodes[0];
   browser('data', browser.test).browse({title: 'Test & Credits', position: 'right'});
   browser('playground', browser.test.data).browse();
   //browser('nodeValue', document.getElementById('victim').childNodes[0]).browse();
@@ -219,7 +220,7 @@ browser.test.data = {
     u: undefined,
     a: [1, 2, 3]
   },
-  victim: document.getElementById('victim').childNodes[0]
+  victim: 'to be defined later'
 };
 
 browser.extendJQ = function () {
