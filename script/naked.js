@@ -20,6 +20,8 @@ function D(str) {
 };
 
 function browser(name, container) {
+  browser.prototype.target =
+    browser.prototype.target || browser.prototype.findTarget();
   var b = object(browser.prototype);
   b.name = name;
   b.container = container;
@@ -32,6 +34,7 @@ browser.prototype = {
   container: null,
   knownType: undefined,
   header: $(HTML.from({table: {tr: {th: ['Name', 'Type', 'Value']}}})),
+  target: null,
   toString: function() {
     return '[Browser '+this.container+'[' + this.name +'] ]';
   },
@@ -86,9 +89,17 @@ browser.prototype = {
       return 'error';
     }
   },
+  findTarget: function() {
+    var naked = $('#naked');
+    if (naked.length > 0) {
+      return naked;
+    } else {
+      return $("<div id='naked'></div>").appendTo('body');
+    }
+  },
   browse: function(dialogOptions) {
     var it = this.browseContents();
-    it.appendTo('#naked');
+    it.appendTo(this.target);
     it = it.wrap(document.createElement('div')).parent();
     it.attr({'class': 'browser', title: this.name});
     it.toDialog(dialogOptions);
