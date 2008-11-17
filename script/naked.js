@@ -196,7 +196,7 @@ browser.prototype = {
   }
 };
 
-function test() {
+browser.test = function () {
   var test = {
     jQuery: "http://jquery.com",
     'jQuery.ui': "http://ui.jquery.com",
@@ -219,7 +219,7 @@ function test() {
   browser('playground', test).browse();
   //browser('nodeValue', document.getElementById('victim').childNodes[0]).browse();
   //browser('body', god.document).browse();
-}
+};
 
 function extendJQ() {
   $.fn.extend({
@@ -259,7 +259,7 @@ $(document).ready(function() {
   DEBUG.onload();
   DEBUG.on();
   D('test');
-  test();
+  browser.test();
 });
 
 //end CGD.naked
