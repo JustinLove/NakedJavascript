@@ -196,34 +196,6 @@ browser.prototype = {
   }
 };
 
-browser.test = function () {
-  var t = arguments.callee;
-  t.data.victim = document.getElementById('victim').childNodes[0];
-  browser('data', t).browse({title: 'Test & Credits', position: 'right'});
-  browser('playground', t.data).browse();
-  //browser('nodeValue', document.getElementById('victim').childNodes[0]).browse();
-  //browser('body', god.document).browse();
-};
-browser.test.data = {
-  jQuery: "http://jquery.com",
-  'jQuery.ui': "http://ui.jquery.com",
-  chili: "http://noteslog.com/chili/",
-  editInPlace: "http://davehauenstein.com/blog/archives/28",
-  CGD: CGD,
-  nakedjs: browser,
-  god: god,
-  playground: {
-    n: 42,
-    s: "blarg",
-    b: "",
-    f: function(x, y) {return x + y;},
-    x: null,
-    u: undefined,
-    a: [1, 2, 3]
-  },
-  victim: 'to be defined later'
-};
-
 browser.extendJQ = function () {
   $.fn.extend(browser.extendJQ.fn);
 };
@@ -256,17 +228,6 @@ browser.extendJQ.fn = {
 
 //necessary
 $(document).ready(browser.extendJQ);
-
-browser.initTest = function() {
-  $('#debugDiv').toDialog({position: 'bottom', title: 'Debug'});
-  DEBUG.onload();
-  DEBUG.on();
-  D('test');
-  browser.test();
-};
-
-//testing
-$(document).ready(browser.initTest);
 
 //end CGD.naked
 }());
