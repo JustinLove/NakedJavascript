@@ -197,9 +197,10 @@ browser.prototype = {
 };
 
 browser.test = function () {
-  browser.test.data.victim = document.getElementById('victim').childNodes[0];
-  browser('data', browser.test).browse({title: 'Test & Credits', position: 'right'});
-  browser('playground', browser.test.data).browse();
+  var t = arguments.callee;
+  t.data.victim = document.getElementById('victim').childNodes[0];
+  browser('data', t).browse({title: 'Test & Credits', position: 'right'});
+  browser('playground', t.data).browse();
   //browser('nodeValue', document.getElementById('victim').childNodes[0]).browse();
   //browser('body', god.document).browse();
 };
