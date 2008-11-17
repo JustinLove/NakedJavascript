@@ -5,8 +5,9 @@ CGD.TEST = CGD.TEST || {};
 CGD.TEST.njs = function () {
   var t = arguments.callee;
   t.data.victim = document.getElementById('victim').childNodes[0];
-  CGD.browser('data', t).browse({title: 'Test & Credits', position: 'right'});
-  CGD.browser('playground', t.data).browse();
+  t.browsers = [];
+  t.browsers[0] = CGD.browser('data', t).browse({title: 'Test & Credits', position: 'right'});
+  t.browsers[1] = CGD.browser('playground', t.data).browse();
   //CGD.browser('nodeValue', document.getElementById('victim').childNodes[0]).browse();
   //CGD.browser('body', god.document).browse();
 };
@@ -15,9 +16,10 @@ CGD.TEST.njs.data = {
   'jQuery.ui': "http://ui.jquery.com",
   chili: "http://noteslog.com/chili/",
   editInPlace: "http://davehauenstein.com/blog/archives/28",
+  god: CGD.god,
   CGD: CGD,
   nakedjs: CGD.browser,
-  god: CGD.god,
+  tester: CGD.TEST.njs,
   playground: {
     n: 42,
     s: "blarg",
