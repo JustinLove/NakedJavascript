@@ -102,7 +102,7 @@ browser.prototype = {
     it.appendTo(this.target);
     it = it.wrap(document.createElement('div')).parent();
     it.attr({'class': 'browser', title: this.name});
-    it.toDialog(dialogOptions);
+    $(document).ready(function() {it.toDialog(dialogOptions);});
     return this;
   },
   browseContents: function() {
