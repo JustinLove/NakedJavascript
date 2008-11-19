@@ -1,4 +1,4 @@
-CGD.JS.require.within('script', 'njs.js', function() {
+CGD.JS.require.within('script/njs.js', function() {
   var r = CGD.JS.require;
   r("../style/naked.css");
 
