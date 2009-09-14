@@ -213,7 +213,7 @@ browser.prototype = {
     }
   },
   full: function() {
-    return this.value().toString();
+    return HTML.NoEscape(this.value().toString());
   }
 };
 
