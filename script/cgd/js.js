@@ -20,7 +20,7 @@ CGD.JS = CGD.JS || {};
   //CGD.DEBUG.p(CGD.JS.expando);
   
   function objectData(o) {
-    return o['expando'] || (o['expando'] = {});
+    return o[expando] || (o[expando] = {});
   }
   publish('objectData');
 
@@ -42,6 +42,7 @@ CGD.JS = CGD.JS || {};
         into[p] = what[p];
       }
     }
+    return into;
   };
   publish('mix');
 
@@ -52,8 +53,40 @@ CGD.JS = CGD.JS || {};
         into[p] = what[p];
       }
     }
+    return into;
   }
   publish('mixSafe');
+  
+  function subclass(base, extensions) {
+    if (typeof(base) == 'function') {
+      base = base.prototype;
+    }
+    
+    var sub;
+    if (!base || base == Object.prototype) {
+      sub = extensions;
+      base = Object.prototype;
+    } else {
+      sub = mix(object(base), extensions);
+    }
+    
+    if (!sub.__proto__) {
+      sub.__proto__ = base;
+    }
+    
+    if (!sub.hasOwnProperty('constructor')) {
+      sub.constructor = function() {
+        if (this == window) {
+          return arguments.callee.apply(new sub.constructor, arguments);
+        }
+        return base.constructor.apply(this, arguments);
+      };
+    }
+    sub.constructor.prototype = sub;
+    
+    return sub.constructor;
+  }
+  publish('subclass');
 
   // The event routines are basically a standards patch for IE
   function addEvent(obj, which, f) {
@@ -117,28 +150,13 @@ CGD.JS = CGD.JS || {};
   }
   publish('loadFlag');
   
-  function windowSize () {
-    if (innerWidth) {
-      return {
-        w: innerWidth, 
-        h: innerHeight
-      };
-    } else if (document.body.clientWidth) {
-      return {
-        w: document.body.clientWidth,
-        h: document.body.clientHeight
-      };
-    } else if (document.documentElement.clientWidth) {
-      return {
-        w: document.documentElement.clientWidth,
-        h: document.documentElement.clientHeight
-      };
-    }
-  }
-  publish('windowSize');
-  
   var RADIANS = Math.PI * 2;
   publish('RADIANS');
+  
+  function sign(n) {
+    return (n < 0) ? -1 : 1;
+  }
+  publish('sign');
   
   // Eval the result of explode to dump an object into the current namespace, i.e.
   //   eval(CGD.JS.explode('CGD.JS'));
@@ -162,23 +180,19 @@ CGD.JS = CGD.JS || {};
   }
   publish('flag');
 
-  // Prototype for exception instances.
-  var notFound = {
-    name: 'Not Found',
-    message: '--',
-    toString: function() {
-      return this.message;
+  var ApplicationError = subclass(Error, {
+    constructor: function(message) {
+      this.message = message;
     }
-  };
+  });
 
-  // Exception constructor
-  function NotFound(message) {
-    my = CGD.JS.object(notFound);
-    my.message = message ? (my.name + ': ' + message) : my.message;
-    return my;
-  }
-  publish('NotFound');
-  
+  CGD.JS.UnsupportedFeature = subclass(ApplicationError, {
+    name: 'Unsupported Feature'
+  });
+
+  CGD.JS.NotFound = subclass(ApplicationError, {
+    name: 'Not Found'
+  });
 }());
 
 CGD.NUMBER = CGD.NUMBER || {};
@@ -321,12 +335,23 @@ CGD.ARRAY = CGD.ARRAY || {};
 //    }
   } else {
     function forEach(what, f) {
-      for (var i = 0;i < what.length;i++) {
-        f(what[i], i, what);
+      if (what) {
+        for (var i = 0;i < what.length;i++) {
+          f(what[i], i, what);
+        }
       }
     }
   }
   publish('forEach');
+  
+  function map(what, f) {
+    var result = new Array(what.length);
+    for (var i = 0;i < what.length;i++) {
+      result[i] = f(what[i], i, what);
+    }
+    return result;
+  }
+  publish('map');
   
   // Extends an array to a specified length, by repeating elements
   function extendRepeat(array, to) {
@@ -384,67 +409,3 @@ CGD.ARRAY = CGD.ARRAY || {};
   publish('compare');
 
 }());
-
-CGD.SET = {
-  is_set: true,
-  set: [],
-  mint: function(initial) {
-    var s = CGD.JS.object(this);
-    s.set = this.set.concat();
-    initial && s.add_all(initial);
-    s.length = s.set.length;
-    return s;
-  },
-  toString: function() {
-    return this.set.toString();
-  },
-  equals: function(b) {
-    if (this.set.length != b.length) {
-      return false;
-    }
-    for (var i = 0;i < this.set.length;i++) {
-      if (!b.include(this.set[i])) {
-        return false;
-      }
-    }
-    return true;
-  },
-  size: function() {return this.set.length;},
-  find: function(x) {
-    for (var i = 0;i < this.set.length;i++) {
-      if (x.equals(this.set[i])) {
-        return i;
-      }
-    }
-    throw CGD.JS.notFound('set.find');
-  },
-  include: function(x) {
-    for (var i = 0;i < this.set.length;i++) {
-      if (x.equals(this.set[i])) {
-        return true;
-      }
-    }
-    return false;
-  },
-  each: function(f) {
-    CGD.ARRAY.forEach(this.set, f);
-  },
-  add: function(x) {
-    if (!this.include(x)) {
-      this.set.push(x);
-      this.length = this.set.length;
-      return true;
-    } else {
-      return false;
-    }
-  },
-  add_all: function(b) {
-    var was = this.set.length;
-    var bs = b.is_set ? b.set : b;
-    for (var i = 0;i < bs.length;i++) {
-      this.add(bs[i]);
-    }
-    return this.set.length != was;
-  }
-};
-CGD.SET.dup = CGD.SET.mint;
