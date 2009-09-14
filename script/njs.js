@@ -3,11 +3,11 @@ CGD.JS.require.within('script/njs.js', function() {
   r("../style/naked.css");
 
   r.under('jquery', function() {
-    r("themes/flora/flora.all.css");
+    r("themes/base/ui.all.css");
 
     r('jquery-1.3.2.js');
     r('jquery.dimensions.js');
-    r('ui.mouse.js');
+    r('ui.core.js');
     r('ui.draggable.js');
     r('ui.resizable.js');
     r('ui.dialog.js');

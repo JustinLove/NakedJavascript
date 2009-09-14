@@ -223,13 +223,13 @@ browser.extendJQ = function () {
 browser.extendJQ.fn = {
   toDialog: function(options) {
     options = options || {};
-    options.width = options.width || this.width() + 50;
-    options.height = options.height || this.height() + 80;
+    options.width = options.width || this.outerWidth() + 90;
+    options.height = options.height || this.outerHeight() + 100;
     options.close = function() {
       $(this).parents('.ui-dialog').
         show().hide('slow', function() {$(this).remove();});
     };
-    this.addClass('flora').dialog(options).
+    this.dialog(options).
       parents('.ui-dialog').hide().show('slow');
     return this;
   },
