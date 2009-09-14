@@ -3,7 +3,6 @@ CGD.JS.require.within('script/njs.js', function() {
   r("../style/naked.css");
 
   r.under('jquery', function() {
-    r("recipes.css");
     r("themes/flora/flora.all.css");
 
     r('jquery-1.3.2.js');
@@ -12,7 +11,7 @@ CGD.JS.require.within('script/njs.js', function() {
     r('ui.draggable.js');
     r('ui.resizable.js');
     r('ui.dialog.js');
-    r('jquery.chili.pack.js');
+    r('jquery.chili-2.2.js');
     r('recipes.js');
     r('jquery.inplace.source.js');
   });

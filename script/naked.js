@@ -108,8 +108,8 @@ browser.prototype = {
   browseContents: function() {
     switch(this.type()) {
       case 'function':
-        return $(HTML.from({div: {p: {code: this.full()}}})).
-          find('code').addClass('javascript').chili().end().
+        return $(HTML.from({div: {pre: {code: this.full()}}})).
+          find('code').addClass('js').chili().end().
           append(this.browseCompound());
       case 'object':
         return this.browseCompound();

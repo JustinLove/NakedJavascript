@@ -2,55 +2,152 @@
 ===============================================================================
 Chili is the jQuery code highlighter plugin
 ...............................................................................
-                                               Copyright 2007 / Andrea Ercolino
--------------------------------------------------------------------------------
 LICENSE: http://www.opensource.org/licenses/mit-license.php
 WEBSITE: http://noteslog.com/chili/
-===============================================================================
-*/
 
-/*
-this file shows how to configure a static setup
-it must be linked from the head of a page like:
-<script type="text/javascript" src="chili/recipes.js"></script>
+											   Copyright 2008 / Andrea Ercolino
+===============================================================================
 */
 
 ChiliBook.recipeLoading = false;
 
 
+
 ChiliBook.recipes[ "html.js" ] = 
 {
-    steps: {
-          mlcom : { exp: /\<!--(?:\w|\W)*?--\>/ }
-        , tag   : { exp: /(?:\<\!?[\w:]+)|(?:\>)|(?:\<\/[\w:]+\>)|(?:\/\>)/ }
-        , aname : { exp: /\s+?[\w-]+:?\w+(?=\s*=)/ }
-        , avalue: { exp: /(=\s*)(([\"\'])(?:(?:[^\3\\]*?(?:\3\3|\\.))*?[^\3\\]*?)\3)/
-			, replacement: '$1<span class="$0">$2</span>' }
-        , entity: { exp: /&[\w#]+?;/ }
-    }
-};
-
-ChiliBook.recipes[ "javascript.js" ] = 
-{
-	steps: {
-		  mlcom   : { exp: /\/\*[^*]*\*+(?:[^\/][^*]*\*+)*\// }
-		, com     : { exp: /\/\/.*/ }
-		, regexp  : { exp: /\/[^\/\\\n]*(?:\\.[^\/\\\n]*)*\/[gim]*/ }
-		, string  : { exp: /(?:\'[^\'\\\n]*(?:\\.[^\'\\\n]*)*\')|(?:\"[^\"\\\n]*(?:\\.[^\"\\\n]*)*\")/ }
-		, numbers : { exp: /\b[+-]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][+-]?\d+)?\b/ }
-		, keywords: { exp: /\b(arguments|break|case|catch|continue|default|delete|do|else|false|for|function|if|in|instanceof|new|null|return|switch|this|true|try|typeof|var|void|while|with)\b/ }
-		, global  : { exp: /\b(toString|valueOf|window|self|element|prototype|constructor|document|escape|unescape|parseInt|parseFloat|setTimeout|clearTimeout|setInterval|clearInterval|NaN|isNaN|Infinity)\b/ }
+	  _name: 'html'
+	, _case: false
+	, _main: {
+		  doctype: { 
+			  _match: /<!DOCTYPE\b[\w\W]*?>/ 
+			, _style: "color: #CC6600;"
+		}
+		, ie_style: {
+			  _match: /(<!--\[[^\]]*\]>)([\w\W]*?)(<!\[[^\]]*\]-->)/
+			, _replace: function( all, open, content, close ) {
+				return "<span class='ie_style'>" + this.x( open ) + "</span>" 
+					  + this.x( content, '//style' ) 
+					  + "<span class='ie_style'>" + this.x( close ) + "</span>";
+			}
+			, _style: "color: DarkSlateGray; font-weight: bold;"
+		}
+		, comment: { 
+			  _match: /<!--[\w\W]*?-->/ 
+			, _style: "color: #4040c2;"
+		}
+		, script: { 
+			  _match: /(<script\s+[^>]*>)([\w\W]*?)(<\/script\s*>)/
+			, _replace: function( all, open, content, close ) { 
+				  return this.x( open, '//tag_start' ) 
+					  + this.x( content, 'js' ) 
+					  + this.x( close, '//tag_end' );
+			} 
+		}
+		, style: { 
+			  _match: /(<style\s+[^>]*>)([\w\W]*?)(<\/style\s*>)/
+			, _replace: function( all, open, content, close ) { 
+				  return this.x( open, '//tag_start' ) 
+					  + this.x( content, 'css' ) 
+					  + this.x( close, '//tag_end' );
+			} 
+		}
+		// matches a starting tag of an element (with attrs)
+		// like "<div ... >" or "<img ... />"
+		, tag_start: { 
+			  _match: /(<\w+)((?:[?%]>|[\w\W])*?)(\/>|>)/ 
+			, _replace: function( all, open, content, close ) { 
+				  return "<span class='tag_start'>" + this.x( open ) + "</span>" 
+					  + this.x( content, '/tag_attrs' ) 
+					  + "<span class='tag_start'>" + this.x( close ) + "</span>";
+			}
+			, _style: "color: navy; font-weight: bold;"
+		} 
+		// matches an ending tag
+		// like "</div>"
+		, tag_end: { 
+			  _match: /<\/\w+\s*>|\/>/ 
+			, _style: "color: navy;"
+		}
+		, entity: { 
+			  _match: /&\w+?;/ 
+			, _style: "color: blue;"
+		}
+	}
+	, tag_attrs: {
+		// matches a name/value pair
+		attr: {
+			// before in $1, name in $2, between in $3, value in $4
+			  _match: /(\W*?)([\w-]+)(\s*=\s*)((?:\'[^\']*(?:\\.[^\']*)*\')|(?:\"[^\"]*(?:\\.[^\"]*)*\"))/ 
+			, _replace: "$1<span class='attr_name'>$2</span>$3<span class='attr_value'>$4</span>"
+			, _style: { attr_name:  "color: green;", attr_value: "color: maroon;" }
+		}
 	}
 };
 
-ChiliBook.recipes[ "css.js" ] = 
+
+
+ChiliBook.recipes[ "js.js" ] = 
 {
-	steps: {
-		  mlcom : { exp: /\/\*[^*]*\*+(?:[^\/][^*]*\*+)*\// }
-		, string: { exp: /(?:\'[^\'\\\n]*(?:\\.[^\'\\\n]*)*\')|(?:\"[^\"\\\n]*(?:\\.[^\"\\\n]*)*\")/ }
-		, number: { exp: /(?:\b[+-]?(?:\d*\.?\d+|\d+\.?\d*))(?:%|(?:(?:px|pt|em|)\b))/ }
-		, attrib: { exp: /\b(?:z-index|x-height|word-spacing|widths|width|widows|white-space|volume|voice-family|visibility|vertical-align|units-per-em|unicode-range|unicode-bidi|text-transform|text-shadow|text-indent|text-decoration|text-align|table-layout|stress|stemv|stemh|src|speech-rate|speak-punctuation|speak-numeral|speak-header|speak|slope|size|right|richness|quotes|position|play-during|pitch-range|pitch|pause-before|pause-after|pause|page-break-inside|page-break-before|page-break-after|page|padding-top|padding-right|padding-left|padding-bottom|padding|overflow|outline-width|outline-style|outline-color|outline|orphans|min-width|min-height|max-width|max-height|mathline|marks|marker-offset|margin-top|margin-right|margin-left|margin-bottom|margin|list-style-type|list-style-position|list-style-image|list-style|line-height|letter-spacing|height|font-weight|font-variant|font-style|font-stretch|font-size-adjust|font-size|font-family|font|float|empty-cells|elevation|display|direction|descent|definition-src|cursor|cue-before|cue-after|cue|counter-reset|counter-increment|content|color|clip|clear|centerline|caption-side|cap-height|bottom|border-width|border-top-width|border-top-style|border-top-color|border-top|border-style|border-spacing|border-right-width|border-right-style|border-right-color|border-right|border-left-width|border-left-style|border-left-color|border-left|border-color|border-collapse|border-bottom-width|border-bottom-style|border-bottom-color|border-bottom|border|bbox|baseline|background-repeat|background-position|background-image|background-color|background-attachment|background|azimuth|ascent)\b/ }
-		, value : { exp: /\b(?:xx-small|xx-large|x-soft|x-small|x-slow|x-low|x-loud|x-large|x-high|x-fast|wider|wait|w-resize|visible|url|uppercase|upper-roman|upper-latin|upper-alpha|underline|ultra-expanded|ultra-condensed|tv|tty|transparent|top|thin|thick|text-top|text-bottom|table-row-group|table-row|table-header-group|table-footer-group|table-column-group|table-column|table-cell|table-caption|sw-resize|super|sub|status-bar|static|square|spell-out|speech|solid|soft|smaller|small-caption|small-caps|small|slower|slow|silent|show|separate|semi-expanded|semi-condensed|se-resize|scroll|screen|s-resize|run-in|rtl|rightwards|right-side|right|ridge|rgb|repeat-y|repeat-x|repeat|relative|projection|print|pre|portrait|pointer|overline|outside|outset|open-quote|once|oblique|nw-resize|nowrap|normal|none|no-repeat|no-open-quote|no-close-quote|ne-resize|narrower|n-resize|move|mix|middle|message-box|medium|marker|ltr|lowercase|lower-roman|lower-latin|lower-greek|lower-alpha|lower|low|loud|local|list-item|line-through|lighter|level|leftwards|left-side|left|larger|large|landscape|justify|italic|invert|inside|inset|inline-table|inline|icon|higher|high|hide|hidden|help|hebrew|handheld|groove|format|fixed|faster|fast|far-right|far-left|fantasy|extra-expanded|extra-condensed|expanded|embossed|embed|e-resize|double|dotted|disc|digits|default|decimal-leading-zero|decimal|dashed|cursive|crosshair|cross|crop|counters|counter|continuous|condensed|compact|collapse|code|close-quote|circle|center-right|center-left|center|caption|capitalize|braille|bottom|both|bolder|bold|block|blink|bidi-override|below|behind|baseline|avoid|auto|aural|attr|armenian|always|all|absolute|above)\b/ }
-		, color : { exp: /(?:\#[a-zA-Z0-9]{3,6})|(?:yellow|white|teal|silver|red|purple|olive|navy|maroon|lime|green|gray|fuchsia|blue|black|aqua)/ }
+	  _name: 'js'
+	, _case: true
+	, _main: {
+		  ml_comment: { 
+			  _match: /\/\*[^*]*\*+(?:[^\/][^*]*\*+)*\//
+			, _style: 'color: gray;'
+		}
+		, sl_comment: { 
+			  _match: /\/\/.*/
+			, _style: 'color: green;'
+		}
+		, string: { 
+			  _match: /(?:\'[^\'\\\n]*(?:\\.[^\'\\\n]*)*\')|(?:\"[^\"\\\n]*(?:\\.[^\"\\\n]*)*\")/
+			, _style: 'color: teal;'
+		}
+		, num: { 
+			  _match: /\b[+-]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][+-]?\d+)?\b/
+			, _style: 'color: red;'
+		}
+		, reg_not: { //this prevents "a / b / c" to be interpreted as a reg_exp
+			  _match: /(?:\w+\s*)\/[^\/\\\n]*(?:\\.[^\/\\\n]*)*\/[gim]*(?:\s*\w+)/
+			, _replace: function( all ) {
+				return this.x( all, '//num' );
+			}
+		}
+		, reg_exp: { 
+			  _match: /\/[^\/\\\n]*(?:\\.[^\/\\\n]*)*\/[gim]*/
+			, _style: 'color: maroon;'
+		}
+		, brace: { 
+			  _match: /[\{\}]/
+			, _style: 'color: red; font-weight: bold;'
+		}
+		, statement: { 
+			  _match: /\b(with|while|var|try|throw|switch|return|if|for|finally|else|do|default|continue|const|catch|case|break)\b/
+			, _style: 'color: navy; font-weight: bold;'
+		}
+		, error: { 
+			  _match: /\b(URIError|TypeError|SyntaxError|ReferenceError|RangeError|EvalError|Error)\b/
+			, _style: 'color: Coral;'
+		}
+		, object: { 
+			  _match: /\b(String|RegExp|Object|Number|Math|Function|Date|Boolean|Array)\b/
+			, _style: 'color: DeepPink;'
+		}
+		, property: { 
+			  _match: /\b(undefined|arguments|NaN|Infinity)\b/
+			, _style: 'color: Purple; font-weight: bold;'
+		}
+		, 'function': { 
+			  _match: /\b(parseInt|parseFloat|isNaN|isFinite|eval|encodeURIComponent|encodeURI|decodeURIComponent|decodeURI)\b/
+			, _style: 'color: olive;'
+		}
+		, operator: {
+			  _match: /\b(void|typeof|this|new|instanceof|in|function|delete)\b/
+			, _style: 'color: RoyalBlue; font-weight: bold;'
+		}
+		, liveconnect: {
+			  _match: /\b(sun|netscape|java|Packages|JavaPackage|JavaObject|JavaClass|JavaArray|JSObject|JSException)\b/
+			, _style: 'text-decoration: overline;'
+		}
 	}
 };
