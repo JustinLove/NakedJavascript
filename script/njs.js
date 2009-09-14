@@ -6,7 +6,7 @@ CGD.JS.require.within('script/njs.js', function() {
     r("recipes.css");
     r("themes/flora/flora.all.css");
 
-    r('jquery-1.2.3.js');
+    r('jquery-1.3.2.js');
     r('jquery.dimensions.js');
     r('ui.mouse.js');
     r('ui.draggable.js');
