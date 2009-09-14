@@ -13,7 +13,7 @@ CGD.JS.require.within('script/njs.js', function() {
     r('ui.dialog.js');
     r('jquery.chili-2.2.js');
     r('recipes.js');
-    r('jquery.inplace.source.js');
+    r('jquery.editinplace.js');
   });
 
   r.under('cgd', function() {
