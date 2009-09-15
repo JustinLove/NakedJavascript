@@ -225,12 +225,12 @@ browser.extendJQ.fn = {
     options = options || {};
     options.width = options.width || this.outerWidth() + 90;
     options.height = options.height || this.outerHeight() + 100;
+    options.show = 'slow';
     options.close = function() {
       $(this).parents('.ui-dialog').
         show().hide('slow', function() {$(this).remove();});
     };
-    this.dialog(options).
-      parents('.ui-dialog').hide().show('slow');
+    this.dialog(options);
     return this;
   },
   tap: function (f) {
