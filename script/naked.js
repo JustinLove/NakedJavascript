@@ -228,9 +228,9 @@ browser.extendJQ.dialogDefaults = {
 browser.extendJQ.fn = {
   toDialog: function(options) {
     options = options || {};
-    mixSafe(options, browser.extendJQ.dialogDefaults);
     options.width = options.width || this.outerWidth() + 90;
-    options.height = options.height || this.outerHeight() + 100;
+    options.height = options.height || this.height() + 100;
+    mixSafe(options, browser.extendJQ.dialogDefaults);
     this.dialog(options);
     return this;
   },

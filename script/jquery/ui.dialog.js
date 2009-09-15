@@ -398,11 +398,11 @@ $.widget("ui.dialog", {
 					pTop += 0;
 					break;
 				case 'bottom':
-					pTop += wnd.height() - this.uiDialog.outerHeight();
+					pTop += wnd.height() - this.uiDialog.height();
 					break;
 				default:
 				case 'middle':
-					pTop += (wnd.height() - this.uiDialog.outerHeight()) / 2;
+					pTop += (wnd.height() - this.uiDialog.height()) / 2;
 			}
 		}
 
@@ -457,6 +457,7 @@ $.widget("ui.dialog", {
 			case "width":
 				this.uiDialog.width(value);
 				break;
+			default: break;
 		}
 
 		$.widget.prototype._setData.apply(this, arguments);
