@@ -220,14 +220,17 @@ browser.prototype = {
 browser.extendJQ = function () {
   $.fn.extend(browser.extendJQ.fn);
 };
+browser.extendJQ.dialogDefaults = {
+  show: 'slow',
+  hide: 'slow',
+  close: function(event, ui) {$(this).remove();}
+};
 browser.extendJQ.fn = {
   toDialog: function(options) {
     options = options || {};
+    mixSafe(options, browser.extendJQ.dialogDefaults);
     options.width = options.width || this.outerWidth() + 90;
     options.height = options.height || this.outerHeight() + 100;
-    options.show ='slow';
-    options.hide = 'slow';
-    options.close = function(event, ui) {$(this).remove();};
     this.dialog(options);
     return this;
   },
