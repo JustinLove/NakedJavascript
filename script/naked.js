@@ -225,11 +225,9 @@ browser.extendJQ.fn = {
     options = options || {};
     options.width = options.width || this.outerWidth() + 90;
     options.height = options.height || this.outerHeight() + 100;
-    options.show = 'slow';
-    options.close = function() {
-      $(this).parents('.ui-dialog').
-        show().hide('slow', function() {$(this).remove();});
-    };
+    options.show ='slow';
+    options.hide = 'slow';
+    options.close = function(event, ui) {$(this).remove();};
     this.dialog(options);
     return this;
   },
