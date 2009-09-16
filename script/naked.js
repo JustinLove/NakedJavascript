@@ -202,10 +202,15 @@ browser.prototype = {
   },
   make_executable: function(jq) {
     var b = this;
-    this.argument_object();
     return jq.click(function() {
-        //browser('result', {result: b.value().call(this.container)}).browse();
-        browser('arguments', {arguments: b.argument_object()}).browse();
+        var args = b.argument_object();
+        browser('arguments', {arguments: args}).browse({
+          close: function() {
+            browser('result', 
+              {result: b.value().apply(b.container, values(args))}
+            ).browse();
+          }
+        });
       }).addClass('link');
   },
   argument_object: function() {

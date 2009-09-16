@@ -301,6 +301,13 @@ CGD.OBJECT = CGD.OBJECT || {};
     return list;
   }
   publish('keys');
+
+  function values(what) {
+    var list = [];
+    forEach(what, function(v, k) {list.push(v);});
+    return list;
+  }
+  publish('values');
 }());
 
 CGD.ARRAY = CGD.ARRAY || {};
