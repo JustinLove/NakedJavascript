@@ -74,6 +74,7 @@ browser.prototype = {
         return isNaN(n) ? undefined : n;
       case 'function':
       case 'object':
+      case 'undefined':
         return eval(s);
       case 'error':
         return undefined;
@@ -163,7 +164,6 @@ browser.prototype = {
   make_actionable: function(jq) {
     switch(this.value()) {
       case null:
-      case undefined:
         return jq;
       default:
         switch(this.type()) {
@@ -172,6 +172,7 @@ browser.prototype = {
             return this.make_browseable(jq);
           case 'string':
           case 'number':
+          case 'undefined':
             return this.make_editable(jq);
           default:
             return jq;
@@ -187,8 +188,9 @@ browser.prototype = {
     // chili doesn't pretty-print function() syntax
     function commit(id, neu, old, params) {
       var v = b.coerce(neu);
-      if (typeof(v) === b.type()) {
-        return b.value(neu);
+      if (typeof(v) === b.type() || b.type() == 'undefined') {
+        b.knownType = undefined;
+        return b.value(v);
       } else {
         return old;
       }
