@@ -200,9 +200,19 @@ browser.prototype = {
   },
   make_executable: function(jq) {
     var b = this;
+    this.argument_object();
     return jq.click(function() {
-        browser('result', {result: b.value().call(this.container)}).browse();
+        //browser('result', {result: b.value().call(this.container)}).browse();
+        browser('arguments', {arguments: b.argument_object()}).browse();
       }).addClass('link');
+  },
+  argument_object: function() {
+    var args = (this.value() + "").match(/\((.*)\)/)[1].split(', ');
+    var obj = {};
+    forEach(args, function(a) {
+      obj[a] = undefined;
+    });
+    return obj;
   },
   brief: function() {
     switch(this.type()) {
