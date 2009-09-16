@@ -231,15 +231,16 @@ browser.extendJQ = function () {
 };
 browser.extendJQ.dialogDefaults = {
   show: 'slow',
-  hide: 'slow',
-  close: function(event, ui) {$(this).remove();}
+  hide: 'slow'
 };
+browser.extendJQ.close = function(event, ui) {$(this).remove();};
 browser.extendJQ.fn = {
   toDialog: function(options) {
     options = options || {};
     options.width = options.width || this.outerWidth() + 90;
     mixSafe(options, browser.extendJQ.dialogDefaults);
     this.dialog(options);
+    this.bind('dialogclose', browser.extendJQ.close);
     return this;
   },
   tap: function (f) {
