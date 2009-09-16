@@ -78,7 +78,7 @@ browser.prototype = {
       case 'error':
         return undefined;
       default:
-        return v;
+        return this.value();
     }
   },
   owner: function() {
