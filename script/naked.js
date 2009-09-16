@@ -145,10 +145,13 @@ browser.prototype = {
   },
   view: function() {
     try {
-      var values = [this.name, this.type(), {span: this.brief()}];
+      var values = [{span: this.name}, this.type(), {span: this.brief()}];
       var html = HTML.from({tr: {td: values}});
       var jq = $(html).addClass(this.owner()).addClass(this.type());
       this.make_actionable(jq.find('td:last span'));
+      if (this.type() == 'function') {
+        this.make_executable(jq.find('td:first span'));
+      }
       return jq;
     } catch (e) {
       D(e);
@@ -193,6 +196,12 @@ browser.prototype = {
     return jq.editInPlace({
         default_text: "",
         callback: commit
+      }).addClass('link');
+  },
+  make_executable: function(jq) {
+    var b = this;
+    return jq.click(function() {
+        browser('result', {result: b.value().call(this.container)}).browse();
       }).addClass('link');
   },
   brief: function() {
