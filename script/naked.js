@@ -206,9 +206,10 @@ browser.prototype = {
         var args = b.argument_object();
         browser('arguments', {arguments: args}).browse({
           close: function() {
-            browser('result', 
-              {result: b.value().apply(b.container, values(args))}
-            ).browse();
+            var result = b.value().apply(b.container, values(args));
+            if (result) {
+              browser('result', {result: result}).browse();
+            }
           }
         });
       }).addClass('link');
