@@ -10,6 +10,7 @@ CGD.TEST.njs = function () {
   t.browsers[1] = t.browsers[0].browsers['playground'].browse({position: 'left'});
   //t.browsers[2] = CGD.browser('u', t.browsers[1].browsers).browse({position: 'left'});
   CGD.browser.prototype.scratch(t);
+  CGD.browser.prototype.scratch(CGD.JS.object);
   //CGD.browser('nodeValue', document.getElementById('victim').childNodes[0]).browse();
   //CGD.browser('body', god.document).browse();
 };

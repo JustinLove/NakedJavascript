@@ -83,8 +83,9 @@ browser.prototype = {
         return isNaN(n) ? undefined : n;
       case 'function':
       case 'object':
-      case 'undefined':
         return eval(s);
+      case 'undefined':
+        return eval('('+s+')');
       case 'error':
         return undefined;
       default:
