@@ -110,7 +110,7 @@ browser.prototype = {
   },
   browse: function(dialogOptions) {
     if ($(".browser."+this.tag).size() > 0) {
-      return this;
+      return this.updateLater();
     }
     // creates dialog view
     var it = this.dialogContents();
@@ -190,6 +190,7 @@ browser.prototype = {
   updateLater: function() {
     var b = this;
     setTimeout(function() {b.update();});
+    return this;
   },  
   update: function() {
     var b = this;
@@ -201,6 +202,7 @@ browser.prototype = {
         $(el).replaceWith(b.dialogContents());
       }
     });
+    return this;
   },
   make_actionable: function(jq) {
     switch(this.value()) {
@@ -271,7 +273,7 @@ browser.prototype = {
       browser.prototype.scratchpadBrowser = browser('scratchpad', browser.prototype).browse();
     } else {
       browser.prototype.scratchpad.push(item);
-      browser.prototype.scratchpadBrowser.browse().updateLater();
+      browser.prototype.scratchpadBrowser.browse();
     }
   },
   brief: function() {
