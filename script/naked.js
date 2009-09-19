@@ -39,6 +39,8 @@ browser.prototype = {
   knownType: undefined,
   header: $(HTML.from({table: {tr: {th: ['Name', 'Type', 'Value']}}})),
   target: null,
+  scratchpad: null,
+  scratchpadBrowser: null,
   id: 0,
   tag: '',
   browsers: null,
@@ -108,6 +110,8 @@ browser.prototype = {
   browse: function(dialogOptions) {
     // creates dialog view
     var it = this.dialogContents();
+    it = it.wrap(document.createElement('div')).parent();
+    it.attr({title: this.name});
     $(document).ready(function() {
       it.toDialog(dialogOptions);
     });
@@ -117,7 +121,7 @@ browser.prototype = {
     var it = this.browseContents();
     it.appendTo(this.target);
     it = it.wrap(document.createElement('div')).parent();
-    it.attr({'class': 'browser '+this.tag, title: this.name});
+    it.attr({'class': 'browser '+this.tag});
     return it;
   },
   browseContents: function() {
@@ -243,7 +247,7 @@ browser.prototype = {
           close: function() {
             var result = b.value().apply(b.container, values(args));
             if (result) {
-              browser('result', {result: result}).browse();
+              b.scratch(result);
             }
           }
         });
@@ -256,6 +260,15 @@ browser.prototype = {
       obj[a] = undefined;
     });
     return obj;
+  },
+  scratch: function(item) {
+    if (!browser.prototype.scratchpad) {
+      browser.prototype.scratchpad = [item];
+      browser.prototype.scratchpadBrowser = browser('scratchpad', browser.prototype).browse();
+    } else {
+      browser.prototype.scratchpad.push(item);
+      browser.prototype.scratchpadBrowser.updateLater();
+    }
   },
   brief: function() {
     switch(this.type()) {

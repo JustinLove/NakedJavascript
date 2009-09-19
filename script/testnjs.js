@@ -7,8 +7,9 @@ CGD.TEST.njs = function () {
   t.data.victim = document.getElementById('victim').childNodes[0];
   t.browsers = [];
   t.browsers[0] = CGD.browser('data', t).browse({title: 'Test & Credits', position: 'right'});
-  t.browsers[1] = t.browsers[0].browsers['playground'].browse();
-  t.browsers[2] = CGD.browser('u', t.browsers[1].browsers).browse({position: 'left'});
+  t.browsers[1] = t.browsers[0].browsers['playground'].browse({position: 'left'});
+  //t.browsers[2] = CGD.browser('u', t.browsers[1].browsers).browse({position: 'left'});
+  CGD.browser.prototype.scratch(t);
   //CGD.browser('nodeValue', document.getElementById('victim').childNodes[0]).browse();
   //CGD.browser('body', god.document).browse();
 };
