@@ -188,6 +188,7 @@ browser.prototype = {
       if (el.tagName == "TR") {
         $(el).replaceWith(b.view());
       } else {
+        $(el).replaceWith(b.dialogContents());
       }
     });
   },
