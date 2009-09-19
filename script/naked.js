@@ -22,9 +22,12 @@ function D(str) {
 function browser(name, container) {
   browser.prototype.target =
     browser.prototype.target || browser.prototype.findTarget();
+  browser.prototype.id += 1;
   var b = object(browser.prototype);
   b.name = name;
   b.container = container;
+  b.id = browser.prototype.id;
+  b.tag = 'Browser' + b.id;
   return b;
 }
 CGD['browser'] = browser;
@@ -35,8 +38,10 @@ browser.prototype = {
   knownType: undefined,
   header: $(HTML.from({table: {tr: {th: ['Name', 'Type', 'Value']}}})),
   target: null,
+  id: 0,
+  tag: '',
   toString: function() {
-    return '[Browser '+this.container+'[' + this.name +'] ]';
+    return '['+this.tag+' '+this.container+'[' + this.name +'] ]';
   },
   value: function(set) {
     if (arguments.length == 1) {
