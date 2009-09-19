@@ -107,7 +107,7 @@ browser.prototype = {
     var it = this.browseContents();
     it.appendTo(this.target);
     it = it.wrap(document.createElement('div')).parent();
-    it.attr({'class': 'browser', title: this.name});
+    it.attr({'class': 'browser '+this.tag, title: this.name});
     $(document).ready(function() {it.toDialog(dialogOptions);});
     return this;
   },
@@ -152,7 +152,9 @@ browser.prototype = {
   view: function() {
     try {
       var values = [{span: this.name}, this.type(), {span: this.brief()}];
-      var html = HTML.from({tr: {td: values}});
+      var x = {};
+      x['tr.'+this.tag] = {td: values};
+      var html = HTML.from(x);
       var jq = $(html).addClass(this.owner()).addClass(this.type());
       this.make_actionable(jq.find('td:last span'));
       if (this.type() == 'function') {
