@@ -144,9 +144,10 @@ browser.prototype = {
 
     try {
       for (var index in v) {
-        var b = browser(index, v);
-        this.browsers[index] = b;
-        b.view().appendTo(jq);
+        if (!this.browsers[index] || !this.browsers[index].browsers) {
+          this.browsers[index] = browser(index, v);
+        }
+        this.browsers[index].view().appendTo(jq);
       }
     } catch (e) {
       return browser(0, [e]).browseCompound();
