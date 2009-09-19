@@ -109,6 +109,9 @@ browser.prototype = {
     }
   },
   browse: function(dialogOptions) {
+    if ($(".browser."+this.tag).size() > 0) {
+      return this;
+    }
     // creates dialog view
     var it = this.dialogContents();
     it = it.wrap(document.createElement('div')).parent();
