@@ -164,7 +164,7 @@ browser.prototype = {
   view: function() {
     // creates a table row view
     try {
-      var values = [{span: this.name}, this.type(), {span: this.brief()}];
+      var values = [{'span.name': this.name}, this.type(), {'span.value': this.brief()}];
       var x = {};
       x['tr.'+this.tag] = {td: values};
       var html = HTML.from(x);

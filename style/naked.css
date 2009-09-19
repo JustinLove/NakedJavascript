@@ -30,7 +30,7 @@
   color: red;
 }
 
-.browser .string span:before,
-.browser .string span:after {
+.browser .string span.value:before,
+.browser .string span.value:after {
   content: '"';
 }
