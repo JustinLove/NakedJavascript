@@ -107,12 +107,18 @@ browser.prototype = {
   },
   browse: function(dialogOptions) {
     // creates dialog view
+    var it = this.dialogContents();
+    $(document).ready(function() {
+      it.toDialog(dialogOptions);
+    });
+    return this;
+  },           
+  dialogContents: function() {
     var it = this.browseContents();
     it.appendTo(this.target);
     it = it.wrap(document.createElement('div')).parent();
     it.attr({'class': 'browser '+this.tag, title: this.name});
-    $(document).ready(function() {it.toDialog(dialogOptions);});
-    return this;
+    return it;
   },
   browseContents: function() {
     switch(this.type()) {
