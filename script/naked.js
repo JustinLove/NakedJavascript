@@ -28,6 +28,7 @@ function browser(name, container) {
   b.container = container;
   b.id = browser.prototype.id;
   b.tag = 'Browser' + b.id;
+  b.browsers = {};
   return b;
 }
 CGD['browser'] = browser;
@@ -40,6 +41,7 @@ browser.prototype = {
   target: null,
   id: 0,
   tag: '',
+  browsers: null,
   toString: function() {
     return '['+this.tag+' '+this.container+'[' + this.name +'] ]';
   },
@@ -142,7 +144,9 @@ browser.prototype = {
 
     try {
       for (var index in v) {
-        browser(index, v).view().appendTo(jq);
+        var b = browser(index, v);
+        this.browsers[index] = b;
+        b.view().appendTo(jq);
       }
     } catch (e) {
       return browser(0, [e]).browseCompound();
