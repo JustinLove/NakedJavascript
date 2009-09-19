@@ -175,6 +175,16 @@ browser.prototype = {
       return $(html).addClass('error');
     }
   },
+  update: function() {
+    var b = this;
+    $('.'+this.tag).each(function (i, el) {
+      var jq = $(el);
+      if (el.tagName == "TR") {
+        $(el).replaceWith(b.view());
+      } else {
+      }
+    });
+  },
   make_actionable: function(jq) {
     switch(this.value()) {
       case null:

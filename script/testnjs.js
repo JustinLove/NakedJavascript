@@ -8,6 +8,7 @@ CGD.TEST.njs = function () {
   t.browsers = [];
   t.browsers[0] = CGD.browser('data', t).browse({title: 'Test & Credits', position: 'right'});
   t.browsers[1] = t.browsers[0].browsers['playground'].browse();
+  t.browsers[2] = CGD.browser('u', t.browsers[1].browsers).browse({position: 'left'});
   //CGD.browser('nodeValue', document.getElementById('victim').childNodes[0]).browse();
   //CGD.browser('body', god.document).browse();
 };
