@@ -271,7 +271,7 @@ browser.prototype = {
       browser.prototype.scratchpadBrowser = browser('scratchpad', browser.prototype).browse();
     } else {
       browser.prototype.scratchpad.push(item);
-      browser.prototype.scratchpadBrowser.updateLater();
+      browser.prototype.scratchpadBrowser.browse().updateLater();
     }
   },
   brief: function() {
