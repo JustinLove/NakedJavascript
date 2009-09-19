@@ -23,6 +23,11 @@
 
 .browser .prototype {
   color: gray;
+  background-color: #DDD;
+}
+
+.browser .prototype .link {
+  color: #88F;
 }
 
 .browser .possibleNative,
