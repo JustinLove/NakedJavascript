@@ -169,10 +169,8 @@ browser.prototype = {
       x['tr.'+this.tag] = {td: values};
       var html = HTML.from(x);
       var jq = $(html).addClass(this.owner()).addClass(this.type());
+      this.make_browseable(jq.find('td:first span'));
       this.make_actionable(jq.find('td:last span'));
-      if (this.type() == 'function') {
-        this.make_executable(jq.find('td:first span'));
-      }
       return jq;
     } catch (e) {
       D(e);
@@ -203,6 +201,7 @@ browser.prototype = {
       default:
         switch(this.type()) {
           case 'function':
+            return this.make_executable(jq);
           case 'object':
             return this.make_browseable(jq);
           case 'string':
