@@ -181,6 +181,10 @@ browser.prototype = {
       return $(html).addClass('error');
     }
   },
+  updateLater: function() {
+    var b = this;
+    setTimeout(function() {b.update();});
+  },  
   update: function() {
     var b = this;
     $('.'+this.tag).each(function (i, el) {
@@ -221,6 +225,7 @@ browser.prototype = {
       var v = b.coerce(neu);
       if (typeof(v) === b.type() || b.type() == 'undefined') {
         b.knownType = undefined;
+        b.updateLater();
         return b.value(v);
       } else {
         return old;
