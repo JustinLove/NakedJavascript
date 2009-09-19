@@ -104,6 +104,7 @@ browser.prototype = {
     }
   },
   browse: function(dialogOptions) {
+    // creates dialog view
     var it = this.browseContents();
     it.appendTo(this.target);
     it = it.wrap(document.createElement('div')).parent();
@@ -150,6 +151,7 @@ browser.prototype = {
     return jq;
   },
   view: function() {
+    // creates a table row view
     try {
       var values = [{span: this.name}, this.type(), {span: this.brief()}];
       var x = {};
