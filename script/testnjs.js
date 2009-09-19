@@ -9,8 +9,6 @@ CGD.TEST.njs = function () {
   t.browsers[0] = CGD.browser('data', t).browse({title: 'Test & Credits', position: 'right'});
   t.browsers[1] = t.browsers[0].browsers['playground'].browse({position: 'left'});
   //t.browsers[2] = CGD.browser('u', t.browsers[1].browsers).browse({position: 'left'});
-  CGD.browser.prototype.scratch(t);
-  CGD.browser.prototype.scratch(CGD.JS.object);
   //CGD.browser('nodeValue', document.getElementById('victim').childNodes[0]).browse();
   //CGD.browser('body', god.document).browse();
 };
@@ -32,7 +30,9 @@ CGD.TEST.njs.data = {
     u: undefined,
     a: [1, 2, 3],
     o: {},
-    h: {toString: function() {return "";}}
+    h: {toString: function() {return "";}},
+    clone: function() {return CGD.JS.object(this);},
+    add: function(prop) {this[prop] = undefined;}
   },
   victim: 'to be defined later'
 };
