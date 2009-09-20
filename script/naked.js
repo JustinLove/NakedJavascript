@@ -50,6 +50,7 @@ browser.prototype = {
   value: function(set) {
     if (arguments.length == 1) {
       try {
+        this.knownType = undefined;
         return this.container[this.name] = set;
       } catch (e) {
         return this.value();
@@ -182,8 +183,18 @@ browser.prototype = {
         addClass(this.owner()).
         addClass(this.type()).
         data('browser', this);
-      this.make_browseable(jq.find('td:first span'));
-      this.make_actionable(jq.find('td:last span'));
+      this.make_browseable(jq.find('.name'));
+      this.make_actionable(jq.find('.value'));
+      jq.droppable({
+        activeClass: 'active',
+        drop: function(event, ui) {
+          var neu = ui.draggable.data('browser').value();
+          var b = $(this).data('browser');
+          //b.changed(b.value());
+          b.updateLater();
+          b.value(neu);
+        }
+      });
       return jq;
     } catch (e) {
       D(e);
@@ -252,7 +263,6 @@ browser.prototype = {
     function commit(id, neu, old, params) {
       var v = b.coerce(neu);
       if (typeof(v) === b.type() || b.type() == 'undefined') {
-        b.knownType = undefined;
         b.updateLater();
         b.changed(old);
         return b.value(v);
@@ -269,7 +279,6 @@ browser.prototype = {
     var b = this;
     return jq.click(function() {
         var args = b.argument_object();
-        D(args);
         if (args) {
           browser('arguments', {arguments: args}).browse({
             close: function() {b.apply(values(args));}

@@ -43,3 +43,7 @@
 .view.string span.value:after {
   content: '"';
 }
+
+.active, .active.prototype {
+  background-color: #AFA;
+}
