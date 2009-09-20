@@ -199,7 +199,7 @@ browser.prototype = {
       }
     });
     $('.view').each(function(i,el) {
-      var b= $(el).data('browser');
+      var b = $(el).data('browser');
       if (b.value() == oldValue) {
         b.updateLater();
       }
