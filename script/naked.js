@@ -176,7 +176,11 @@ browser.prototype = {
       var x = {};
       x['tr.'+this.tag] = {td: values};
       var html = HTML.from(x);
-      var jq = $(html).addClass(this.owner()).addClass(this.type());
+      var jq = $(html).
+        addClass('view').
+        addClass(this.owner()).
+        addClass(this.type()).
+        data('browser', this);
       this.make_browseable(jq.find('td:first span'));
       this.make_actionable(jq.find('td:last span'));
       return jq;
@@ -186,6 +190,20 @@ browser.prototype = {
       var html = HTML.from({tr: {td: values}});
       return $(html).addClass('error');
     }
+  },
+  changed: function(oldValue) {
+    $('.browser').each(function(i, el) {
+      var b = $(el).data('browser');
+      if (b.container == oldValue) {
+        b.updateLater();
+      }
+    });
+    $('.view').each(function(i,el) {
+      var b= $(el).data('browser');
+      if (b.value() == oldValue) {
+        b.updateLater();
+      }
+    });
   },
   updateLater: function() {
     var b = this;
@@ -234,7 +252,7 @@ browser.prototype = {
       var v = b.coerce(neu);
       if (typeof(v) === b.type() || b.type() == 'undefined') {
         b.knownType = undefined;
-        b.updateLater();
+        b.changed(old);
         return b.value(v);
       } else {
         return old;
