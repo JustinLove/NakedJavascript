@@ -31,7 +31,7 @@ CGD.TEST.njs.data = {
     a: [1, 2, 3],
     o: {},
     h: {toString: function() {return "";}},
-    clone: function() {return CGD.JS.object(this);},
+    beget: function() {return CGD.JS.object(this);},
     add: function(prop) {this[prop] = undefined;}
   },
   victim: 'to be defined later'
