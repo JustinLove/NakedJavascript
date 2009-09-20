@@ -269,14 +269,17 @@ browser.prototype = {
         var args = b.argument_object();
         browser('arguments', {arguments: args}).browse({
           close: function() {
-            var result = b.value().apply(b.container, values(args));
-            $('.browser').each(function(i, el) {$(el).data('browser').update();});
-            if (result) {
-              b.scratch(result);
-            }
+            b.apply(values(args));
           }
         });
       }).addClass('link');
+  },
+  apply: function(args) {
+    var result = this.value().apply(this.container, args);
+    $('.browser').each(function(i, el) {$(el).data('browser').update();});
+    if (result) {
+      this.scratch(result);
+    }
   },
   argument_object: function() {
     var args = (this.value() + "").match(/\((.*)\)/)[1].split(', ');
