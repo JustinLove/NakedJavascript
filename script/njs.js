@@ -9,6 +9,7 @@ CGD.JS.require.within('script/njs.js', function() {
     r('jquery.dimensions.js');
     r('ui.core.js');
     r('ui.draggable.js');
+    r('ui.droppable.js');
     r('ui.resizable.js');
     r('ui.dialog.js');
     r('jquery.chili-2.2.js');
