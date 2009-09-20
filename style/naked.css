@@ -13,6 +13,10 @@
   background-color: white;
 }
 
+.ui-draggable-dragging {
+  background-color: #FFA;
+}
+
 .view td {
   padding: 5px;
 }

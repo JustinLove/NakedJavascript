@@ -177,6 +177,7 @@ browser.prototype = {
       x['tr.'+this.tag] = {td: values};
       var html = HTML.from(x);
       var jq = $(html).
+        draggable({helper: 'clone', appendTo: "#naked", zIndex: 2000}).
         addClass('view').
         addClass(this.owner()).
         addClass(this.type()).
