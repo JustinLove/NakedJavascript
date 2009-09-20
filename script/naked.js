@@ -252,6 +252,7 @@ browser.prototype = {
       var v = b.coerce(neu);
       if (typeof(v) === b.type() || b.type() == 'undefined') {
         b.knownType = undefined;
+        b.updateLater();
         b.changed(old);
         return b.value(v);
       } else {
