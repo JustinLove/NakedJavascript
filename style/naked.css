@@ -9,33 +9,33 @@
   border-spacing: 0.1em 0.2em;
 }
 
-.browser tr {
+.view {
   background-color: white;
 }
 
-.browser td {
+.view td {
   padding: 5px;
 }
 
-.browser .link {
+.view .link {
   color: blue;
 }
 
-.browser .prototype {
+.view.prototype {
   color: gray;
   background-color: #DDD;
 }
 
-.browser .prototype .link {
+.view.prototype .link {
   color: #88F;
 }
 
-.browser .possibleNative,
-.browser .error {
+.view.possibleNative,
+.view.error {
   color: red;
 }
 
-.browser .string span.value:before,
-.browser .string span.value:after {
+.view.string span.value:before,
+.view.string span.value:after {
   content: '"';
 }
