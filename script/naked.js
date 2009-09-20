@@ -267,11 +267,14 @@ browser.prototype = {
     var b = this;
     return jq.click(function() {
         var args = b.argument_object();
-        browser('arguments', {arguments: args}).browse({
-          close: function() {
-            b.apply(values(args));
-          }
-        });
+        D(args);
+        if (args) {
+          browser('arguments', {arguments: args}).browse({
+            close: function() {b.apply(values(args));}
+          });
+        } else {
+          b.apply();
+        }
       }).addClass('link');
   },
   apply: function(args) {
@@ -283,6 +286,9 @@ browser.prototype = {
   },
   argument_object: function() {
     var args = (this.value() + "").match(/\((.*)\)/)[1].split(', ');
+    if (args[0] == "") {
+      return undefined;
+    }
     var obj = {};
     forEach(args, function(a) {
       obj[a] = undefined;
