@@ -125,7 +125,7 @@ browser.prototype = {
     var it = this.browseContents();
     it.appendTo(this.target);
     it = it.wrap(document.createElement('div')).parent();
-    it.attr({'class': 'browser '+this.tag});
+    it.attr({'class': 'browser '+this.tag}).data('browser', this);
     return it;
   },
   browseContents: function() {
@@ -252,6 +252,7 @@ browser.prototype = {
         browser('arguments', {arguments: args}).browse({
           close: function() {
             var result = b.value().apply(b.container, values(args));
+            $('.browser').each(function(i, el) {$(el).data('browser').update();});
             if (result) {
               b.scratch(result);
             }
