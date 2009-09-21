@@ -192,11 +192,13 @@ browser.prototype = {
       value.data('value', this.value());
       value.draggable({helper: 'clone', appendTo: "#naked", zIndex: 2000});
       value.droppable({
-        activeClass: 'active',
+        hoverClass: 'active',
         drop: function(event, ui) {
           var neu = ui.draggable.data('value');
-          b.changed(b.value());
+          var old = b.value();
           b.value(neu);
+          b.changed(old);
+          b.updateLater();
         }
       });
       return jq;
@@ -228,6 +230,7 @@ browser.prototype = {
   },  
   update: function() {
     var b = this;
+    b.knownType = undefined;
     $('.'+this.tag).each(function (i, el) {
       var jq = $(el);
       if (el.tagName == "TR") {
