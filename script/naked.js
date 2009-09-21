@@ -178,20 +178,24 @@ browser.prototype = {
       x['tr.'+this.tag] = {td: values};
       var html = HTML.from(x);
       var jq = $(html).
-        draggable({helper: 'clone', appendTo: "#naked", zIndex: 2000}).
         addClass('view').
         addClass(this.owner()).
         addClass(this.type()).
         data('browser', this);
-      this.make_browseable(jq.find('.name'));
-      this.make_actionable(jq.find('.value'));
-      jq.droppable({
+      var name = jq.find('.name').parent();
+      var value = jq.find('.value').parent();
+      this.make_browseable(name);
+      this.make_actionable(value);
+      var b = this;
+      name.data('value', this.name);
+      name.draggable({helper: 'clone', appendTo: "#naked", zIndex: 2000});
+      value.data('value', this.value());
+      value.draggable({helper: 'clone', appendTo: "#naked", zIndex: 2000});
+      value.droppable({
         activeClass: 'active',
         drop: function(event, ui) {
-          var neu = ui.draggable.data('browser').value();
-          var b = $(this).data('browser');
-          //b.changed(b.value());
-          b.updateLater();
+          var neu = ui.draggable.data('value');
+          b.changed(b.value());
           b.value(neu);
         }
       });
