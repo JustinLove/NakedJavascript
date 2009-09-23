@@ -22,7 +22,7 @@ CGD.TEST.njs.data = {
   nakedjs: CGD.browser,
   tester: CGD.TEST.njs,
   object: CGD.JS.object,
-  extend: function(obj, prop) {obj[prop] = undefined;},
+  extend: function(obj, prop, value) {obj[prop] = value;},
   playground: {
     n: 42,
     s: "blarg",
@@ -34,7 +34,7 @@ CGD.TEST.njs.data = {
     o: {},
     h: {toString: function() {return "";}},
     beget: function() {return CGD.JS.object(this);},
-    add: function(prop) {this[prop] = undefined;}
+    add: function(prop, value) {this[prop] = value;}
   },
   victim: 'to be defined later'
 };
