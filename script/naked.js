@@ -321,6 +321,9 @@ browser.prototype = {
       browser.prototype.scratchpad.push(item);
       browser.prototype.scratchpadBrowser.browse();
     }
+    if (typeof(item) == 'object') {
+      browser(browser.prototype.scratchpad.length-1, browser.prototype.scratchpad).browse();
+    }
   },
   brief: function() {
     switch(this.type()) {
