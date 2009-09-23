@@ -21,6 +21,8 @@ CGD.TEST.njs.data = {
   CGD: CGD,
   nakedjs: CGD.browser,
   tester: CGD.TEST.njs,
+  object: CGD.JS.object,
+  extend: function(obj, prop) {obj[prop] = undefined;},
   playground: {
     n: 42,
     s: "blarg",
