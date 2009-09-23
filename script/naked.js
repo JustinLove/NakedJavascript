@@ -206,7 +206,7 @@ browser.prototype = {
       D(e);
       var values = [this.name, 'view error', e.name];
       var html = HTML.from({tr: {td: values}});
-      return $(html).addClass('error');
+      return $(html).addClass('view error');
     }
   },
   changed: function(oldValue) {
