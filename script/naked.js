@@ -182,10 +182,12 @@ browser.prototype = {
         addClass(this.owner()).
         addClass(this.type()).
         data('browser', this);
-      var name = jq.find('.name').parent();
-      var value = jq.find('.value').parent();
+      var name = jq.find('.name');
+      var value = jq.find('.value');
       this.make_browseable(name);
       this.make_actionable(value);
+      name = name.parent();
+      value = value.parent();
       var b = this;
       name.data('value', this.name);
       name.draggable({helper: 'clone', appendTo: "#naked", zIndex: 2000});
