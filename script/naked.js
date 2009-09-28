@@ -195,6 +195,7 @@ browser.prototype = {
       value.draggable({helper: 'clone', appendTo: "#naked", zIndex: 2000});
       value.droppable({
         hoverClass: 'active',
+        accept: 'td',
         drop: function(event, ui) {
           var neu = ui.draggable.data('value');
           var old = b.value();
