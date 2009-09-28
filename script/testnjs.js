@@ -52,6 +52,7 @@ CGD.TEST.njs.data = {
       cow: cow,
       "Purple Cow": purpleCow,
       "Purple Calf": purpleCalf,
+      F: function () {},
       object: CGD.JS.object,
       extend: function(obj, prop, value) {obj[prop] = value;},
       neu: function(constructor) {return new constructor;}
