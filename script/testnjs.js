@@ -44,7 +44,7 @@ CGD.TEST.njs.data = {
       add: function(prop, value) {this[prop] = value;}
     };
     var purpleCow = cow.beget();
-    purpleCow.name = "Martha";
+    purpleCow.name = "Penny";
     purpleCow.color = "purple";
     var purpleCalf = purpleCow.beget();
     purpleCalf.name = "Ginger";
