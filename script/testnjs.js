@@ -21,8 +21,6 @@ CGD.TEST.njs.data = {
   CGD: CGD,
   nakedjs: CGD.browser,
   tester: CGD.TEST.njs,
-  object: CGD.JS.object,
-  extend: function(obj, prop, value) {obj[prop] = value;},
   playground: {
     n: 42,
     s: "blarg",
@@ -36,6 +34,29 @@ CGD.TEST.njs.data = {
     beget: function() {return CGD.JS.object(this);},
     add: function(prop, value) {this[prop] = value;}
   },
+  presentation: (function() {
+    var cow = {
+      name: "Bessie",
+      color: "spotted",
+      moo: function() {alert("Moo");},
+      toString: function() {return this.name + ' the ' + this.color + ' cow';},
+      beget: function() {return CGD.JS.object(this);},
+      add: function(prop, value) {this[prop] = value;}
+    };
+    var purpleCow = cow.beget();
+    purpleCow.name = "Martha";
+    purpleCow.color = "purple";
+    var purpleCalf = purpleCow.beget();
+    purpleCalf.name = "Ginger";
+    
+    return {
+      cow: cow,
+      purpleCow: purpleCow,
+      purpleCalf: purpleCalf,
+      object: CGD.JS.object,
+      extend: function(obj, prop, value) {obj[prop] = value;}    
+    };
+  })(),
   victim: 'to be defined later'
 };
 
