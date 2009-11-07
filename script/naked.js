@@ -84,9 +84,9 @@ browser.prototype = {
         return isNaN(n) ? undefined : n;
       case 'function':
       case 'object':
-        return eval(s);
+        return this.eval(s);
       case 'undefined':
-        return eval('('+s+')');
+        return this.eval('('+s+')');
       case 'error':
         return undefined;
       default:
@@ -347,8 +347,33 @@ browser.prototype = {
   },
   full: function() {
     return HTML.NoEscape(this.value().toString());
+  },
+  eval: function(s) {
+    if (s.match(/^\(.*\)$/)) {
+      s = s.substr(1, s.length-2);
+    }
+    if (s.match(/^function/)) {
+      return function(){};
+    } else if (s.match(/^\{.*\}$/)) {
+      return {};
+    } else if (s.match(/^"[^"]*"$/)) {
+      return s.substr(1, s.length-2);
+    } else if (s.match(/^'[^"]*'$/)) {
+      return s.substr(1, s.length-2);
+    } else if (s.match(/^[\d.]+$/)) {
+      return parseInt(s, 10);
+    } else if (s == "null") {
+      return null;
+    } else {
+      return undefined;
+    }
   }
 };
+
+if (window.location.toString().substr(0,5) == 'file:') {
+  browser.prototype.eval = window.eval;
+}
+
 
 browser.extendJQ = function () {
   $.fn.extend(browser.extendJQ.fn);
