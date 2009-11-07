@@ -64,7 +64,7 @@ CGD.JS = CGD.JS || {};
     
     var sub;
     if (!base || base == Object.prototype) {
-      sub = extensions;
+      sub = extensions || {};
       base = Object.prototype;
     } else {
       sub = mix(object(base), extensions);
@@ -79,7 +79,10 @@ CGD.JS = CGD.JS || {};
         if (this == window) {
           return arguments.callee.apply(new sub.constructor, arguments);
         }
-        return base.constructor.apply(this, arguments);
+        if (base.constructor != Object) {
+          return base.constructor.apply(this, arguments);
+        }
+        return this;
       };
     }
     sub.constructor.prototype = sub;
@@ -149,9 +152,6 @@ CGD.JS = CGD.JS || {};
     }
   }
   publish('loadFlag');
-  
-  var RADIANS = Math.PI * 2;
-  publish('RADIANS');
   
   function sign(n) {
     return (n < 0) ? -1 : 1;
