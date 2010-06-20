@@ -1,28 +1,28 @@
-CGD.JS.require.within('script/njs.js', function() {
-  var r = CGD.JS.require;
-  r("../style/naked.css");
+new CGD.Module('script/njs', function(m) {
+  m.enqueue("style/naked", 'text/css');
 
-  r.under('jquery', function() {
-    r("themes/base/ui.all.css");
+  m.under('jquery/', function(m) {
+    m.enqueue("./themes/base/ui.all", 'text/css');
 
-    r('jquery-1.3.2.js');
-    r('jquery.dimensions.js');
-    r('ui.core.js');
-    r('ui.draggable.js');
-    r('ui.droppable.js');
-    r('ui.resizable.js');
-    r('ui.dialog.js');
-    r('jquery.chili-2.2.js');
-    r('recipes.js');
-    r('jquery.editinplace.js');
+    m.require('./jquery-1.3.2');
+    $.ready();
+    m.require('./jquery.dimensions');
+    m.require('./ui.core');
+    m.require('./ui.draggable');
+    m.require('./ui.droppable');
+    m.require('./ui.resizable');
+    m.require('./ui.dialog');
+    m.require('./jquery.chili-2.2');
+    m.require('./recipes');
+    m.require('./jquery.editinplace');
   });
 
-  r.under('cgd', function() {
-    r('debug.js');
-    r('js.js');
-    r('html.js');
+  m.under('cgd/', function(m) {
+    m.require('./debug');
+    m.require('./js');
+    m.require('./html');
   });
 
-  r('naked.js'); 
+  m.require('./naked'); 
 });
 
